@@ -1,0 +1,15 @@
+server:
+  port : ${SERVER_PORT}
+  servlet:
+    session:
+      timeout: 60m
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            provider: facebook
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
