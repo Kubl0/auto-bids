@@ -1,28 +1,40 @@
 package autobids.apigateway.controller;
 
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class TestController {
 
     @GetMapping("/")
-    public String hello() {
-        return "Hello, home";
+    @Async
+    public CompletableFuture<String> hello() {
+        return CompletableFuture.completedFuture("Hello, home");
     }
 
     @GetMapping("/secured")
-    public String secured(Authentication authentication) {
-        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-        OAuth2User user = oauthToken.getPrincipal();
-        System.out.println(user);
-        String email = user.getAttribute("email");
-        System.out.println("User email: " + email);
-        return "Hello, secured";
+    @Async
+    public CompletableFuture<String> secured(Authentication authentication) {
+        return CompletableFuture.supplyAsync(() -> {
+            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+            OAuth2User user = oauthToken.getPrincipal();
+            System.out.println(user);
+            String email = user.getAttribute("email");
+            System.out.println("User email: " + email);
+            return "Hello, secured";
+        });
     }
 
+    @GetMapping("/profile/{name}")
+    @Async
+    public CompletableFuture<String> user_profile(@PathVariable(name = "name") String name, Authentication authentication) {
+        return CompletableFuture.completedFuture(name);
+    }
 }
