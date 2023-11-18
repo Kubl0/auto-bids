@@ -1,4 +1,4 @@
-package autobids.apigateway.controller;
+package autobids.apigateway.profiles.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
