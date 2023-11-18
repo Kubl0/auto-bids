@@ -14,91 +14,100 @@ public class ProfilesController {
     @GetMapping("/user/email={email}")
     @Async
     public CompletableFuture<ResponseEntity<String>> get_user_profile(@PathVariable String email) {
-        return CompletableFuture.completedFuture(new ResponseEntity<>(String.format("""
-                {
-                    "user_name": "john_doe",
-                    "email": "%s",
-                    "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                }
-                """, email), HttpStatus.OK));
+        return CompletableFuture.completedFuture(
+                new ResponseEntity<>(String.format(
+                        """
+                                {
+                                    "user_name": "john_doe",
+                                    "email": "%s",
+                                    "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                }
+                                """, email),
+                        HttpStatus.OK
+                ));
     }
 
     @GetMapping("/list/page={page}")
     @Async
     public CompletableFuture<ResponseEntity<String>> get_profiles(@PathVariable Integer page) {
-        return CompletableFuture.completedFuture(new ResponseEntity<>(
-                """
-                        [
-                            {
-                                "user_name": "john_doe",
-                                "email": "john.doe@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "alice_smith",
-                                "email": "alice.smith@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "bob_jones",
-                                "email": "bob.jones@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "emma_wilson",
-                                "email": "emma.wilson@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "charlie_brown",
-                                "email": "charlie.brown@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "olivia_miller",
-                                "email": "olivia.miller@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "david_wright",
-                                "email": "david.wright@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "sophia_hall",
-                                "email": "sophia.hall@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "michael_smith",
-                                "email": "michael.smith@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            },
-                            {
-                                "user_name": "samantha_davis",
-                                "email": "samantha.davis@example.com",
-                                "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
-                            }
-                        ]
-                        """, HttpStatus.OK));
+        return CompletableFuture.completedFuture(
+                new ResponseEntity<>(
+                        """
+                                [
+                                    {
+                                        "user_name": "john_doe",
+                                        "email": "john.doe@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "alice_smith",
+                                        "email": "alice.smith@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "bob_jones",
+                                        "email": "bob.jones@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "emma_wilson",
+                                        "email": "emma.wilson@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "charlie_brown",
+                                        "email": "charlie.brown@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "olivia_miller",
+                                        "email": "olivia.miller@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "david_wright",
+                                        "email": "david.wright@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "sophia_hall",
+                                        "email": "sophia.hall@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "michael_smith",
+                                        "email": "michael.smith@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    },
+                                    {
+                                        "user_name": "samantha_davis",
+                                        "email": "samantha.davis@example.com",
+                                        "profile_image": "https://samequizy.pl/wp-content/uploads/2021/12/29/images_e2bca6c20b784ca3.jpeg"
+                                    }
+                                ]
+                                """
+                        , HttpStatus.OK
+                ));
     }
 
     @PutMapping("/user/email={email}")
     @Async
     public CompletableFuture<ResponseEntity<String>> edit_profile(@PathVariable String email, @RequestBody String profile) {
-        return CompletableFuture.completedFuture(new ResponseEntity<>(
-                "profile edited: " + profile,
-                HttpStatus.OK
-        ));
+        return CompletableFuture.completedFuture(
+                new ResponseEntity<>(
+                        "profile edited: " + profile,
+                        HttpStatus.OK
+                ));
     }
 
     @DeleteMapping("/user/email={email}")
     @Async
     public CompletableFuture<ResponseEntity<String>> delete_profile(@PathVariable String email) {
-        return CompletableFuture.completedFuture(new ResponseEntity<>(
-                "profile deleted: " + email,
-                HttpStatus.OK
-        ));
+        return CompletableFuture.completedFuture(
+                new ResponseEntity<>(
+                        "profile deleted: " + email,
+                        HttpStatus.OK
+                ));
     }
 
 }
