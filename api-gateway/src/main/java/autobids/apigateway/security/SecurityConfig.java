@@ -20,8 +20,10 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.requestMatchers("/secured").authenticated();
+                    auth.anyRequest().permitAll();
+//                    auth.requestMatchers("/").permitAll();
+//                    auth.anyRequest().authenticated();
                 })
                 .oauth2Login(withDefaults())
                 .build();

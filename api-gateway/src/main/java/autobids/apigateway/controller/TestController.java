@@ -5,7 +5,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,11 +29,5 @@ public class TestController {
             System.out.println("User email: " + email);
             return "Hello, secured";
         });
-    }
-
-    @GetMapping("/profile/{name}")
-    @Async
-    public CompletableFuture<String> user_profile(@PathVariable(name = "name") String name, Authentication authentication) {
-        return CompletableFuture.completedFuture(name);
     }
 }
