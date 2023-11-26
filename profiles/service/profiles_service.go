@@ -16,7 +16,6 @@ func ConnectDB() *mongo.Client {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(os.Getenv("DB_PROFILES_HOST"))
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)

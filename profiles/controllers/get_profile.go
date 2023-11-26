@@ -2,45 +2,42 @@ package controllers
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"profiles/models"
 	"profiles/responses"
 	"profiles/service"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
-func getProfile(c *gin.Context) {
+func GetProfile(c *gin.Context) {
+	result := make(chan responses.UserResponse)
 
-	cCp := c.Copy()
-
-	go func() {
+	go func(cCp *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
-
-		var result models.Profile
+		defer close(result)
+		var resultModel models.Profile
 
 		email := cCp.Param("email")
 		var userCollection = service.GetCollection(service.DB, "profiles")
-		err := userCollection.FindOne(ctx, bson.D{{"email", email}}).Decode(&result)
+		err := userCollection.FindOne(ctx, bson.D{{"email", email}}).Decode(&resultModel)
 		if err != nil {
-			cCp.JSON(
-				http.StatusInternalServerError,
-				responses.UserResponse{
-					Status:  http.StatusInternalServerError,
-					Message: "Error finding profile",
-					Data:    map[string]interface{}{"error": err.Error()},
-				})
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error finding profile",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
 		}
-
-		cCp.JSON(
-			http.StatusOK,
-			responses.UserResponse{
-				Status:  http.StatusOK,
-				Message: "ok",
-				Data:    map[string]interface{}{"data": result},
-			},
-		)
-	}()
+		result <- responses.UserResponse{
+			Status:  http.StatusOK,
+			Message: "ok",
+			Data:    map[string]interface{}{"data": resultModel},
+		}
+	}(c.Copy())
+	res := <-result
+	c.JSON(res.Status, res)
 }

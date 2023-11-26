@@ -1,9 +1,18 @@
 package main
 
 import (
-	"profiles/service"
+	"github.com/gin-gonic/gin"
+	"os"
+	"profiles/routes"
 )
 
 func main() {
-	service.ConnectDB()
+	router := gin.Default()
+
+	routes.SessionRoute(router)
+
+	errRouter := router.Run(os.Getenv("PROFILES_URI"))
+	if errRouter != nil {
+		panic(errRouter)
+	}
 }
