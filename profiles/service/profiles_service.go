@@ -12,7 +12,10 @@ import (
 )
 
 func ConnectDB() *mongo.Client {
-	godotenv.Load(".env")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println(os.Getenv("DB_PROFILES_HOST"))
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
