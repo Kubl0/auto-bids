@@ -18,7 +18,7 @@ func EditProfile(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 		defer close(result)
-		var resultModel models.EditProfile
+		var resultModel models.PostProfile
 
 		if err := cCp.BindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{

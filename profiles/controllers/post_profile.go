@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"profiles/models"
 	"profiles/responses"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func PostProfile(c *gin.Context) {
@@ -19,10 +19,21 @@ func PostProfile(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 		defer close(result)
-		var resultModel models.Profile
+		var resultModel models.PostProfile
+
+		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusBadRequest,
+				Message: "Invalid request body",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
+		fmt.Print(resultModel)
 
 		var userCollection = service.GetCollection(service.DB, "profiles")
-		results, err := userCollection.InsertOne(ctx, bson.D{{"email", resultModel}})
+		results, err := userCollection.InsertOne(ctx, resultModel)
 		if err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
