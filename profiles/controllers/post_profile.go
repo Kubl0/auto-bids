@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"profiles/models"
 	"profiles/responses"
@@ -19,6 +22,9 @@ func PostProfile(c *gin.Context) {
 		defer cancel()
 		defer close(result)
 		var resultModel models.PostProfile
+		validate := validator.New(validator.WithRequiredStructEnabled())
+
+		fmt.Println(resultModel)
 
 		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
@@ -29,7 +35,26 @@ func PostProfile(c *gin.Context) {
 			return
 		}
 
+		if err := validate.Struct(resultModel); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error validation profile",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
 		var userCollection = service.GetCollection(service.DB, "profiles")
+		existingProfile := models.PostProfile{}
+		err := userCollection.FindOne(ctx, bson.M{"email": resultModel.Email}).Decode(&existingProfile)
+		if err == nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusConflict,
+				Message: "Profile with the given email already exists",
+				Data:    map[string]interface{}{"error": "Email already in use"},
+			}
+			return
+		}
 		results, err := userCollection.InsertOne(ctx, resultModel)
 		if err != nil {
 			result <- responses.UserResponse{

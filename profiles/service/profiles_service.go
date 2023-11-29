@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -12,10 +11,6 @@ import (
 )
 
 func ConnectDB() *mongo.Client {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)

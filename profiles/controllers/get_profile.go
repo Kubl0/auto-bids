@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	"profiles/models"
 	"profiles/responses"
@@ -20,10 +21,21 @@ func GetProfile(c *gin.Context) {
 		defer cancel()
 		defer close(result)
 		var resultModel models.Profile
+		validate := validator.New(validator.WithRequiredStructEnabled())
 
-		email := cCp.Param("email")
+		email := models.Email{Email: cCp.Param("email")}
+
+		if err := validate.Struct(email); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error validation profile",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
 		var userCollection = service.GetCollection(service.DB, "profiles")
-		err := userCollection.FindOne(ctx, bson.D{{"email", email}}).Decode(&resultModel)
+		err := userCollection.FindOne(ctx, bson.D{{"email", email.Email}}).Decode(&resultModel)
 		if err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,

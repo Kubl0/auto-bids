@@ -34,7 +34,7 @@ func EditProfile(c *gin.Context) {
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
-				Message: "Error validationg profile",
+				Message: "Error validation profile",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
