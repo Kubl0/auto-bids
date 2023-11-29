@@ -10,6 +10,7 @@ func SessionRoute(router *gin.Engine) {
 	{
 		profiles.GET("/user_profile/:email", controllers.GetProfile)
 		profiles.POST("/user_profile", controllers.PostProfile)
+		profiles.DELETE("/user_profile/:email", controllers.DeleteProfile)
 		profiles.PUT("/user_profile", controllers.EditProfile)
 	}
 }

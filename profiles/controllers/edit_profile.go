@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"profiles/models"
@@ -18,12 +19,22 @@ func EditProfile(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 		defer close(result)
-		var resultModel models.PostProfile
+		var resultModel models.EditProfile
+		validate := validator.New(validator.WithRequiredStructEnabled())
 
 		if err := cCp.BindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error model edit_profile",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
+		if err := validate.Struct(resultModel); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error validationg profile",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
@@ -48,6 +59,7 @@ func EditProfile(c *gin.Context) {
 			}
 			return
 		}
+
 		if results.MatchedCount == 0 {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
