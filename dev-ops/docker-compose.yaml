@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  api-gateway-net:
+  profiles-net:
+
+services:
+  api-gateway:
+    env_file:
+      - .env-api-gateway
+    build:
+      context: api-gateway/
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:4000:4000"
+    networks:
+      - api-gateway-net
+      - profiles-net
+
+  profiles:
+    env_file:
+      - .env-profiles
+    build:
+      context: profiles/
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:4100:4100"
+    networks:
+      - api-gateway-net
+      - profiles-net
+
