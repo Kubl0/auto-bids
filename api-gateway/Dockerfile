@@ -1,15 +1,12 @@
-FROM eclipse-temurin:17-jdk-alpine as builder
-WORKDIR /opt/app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-ARG SERVER_PORT=4000
-RUN ./mvnw dependency:go-offline
-COPY ./src ./src
-RUN ./mvnw clean install
+FROM eclipse-temurin:17-jdk-jammy AS build
+ENV HOME=/usr/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+ADD . $HOME
+RUN --mount=type=cache,target=/root/.m2 ./mvnw -f $HOME/pom.xml clean package
 
-FROM eclipse-temurin:17-jre-alpine
-WORKDIR /opt/app
+FROM eclipse-temurin:17-jre-jammy
+ARG JAR_FILE=/usr/app/target/*.jar
+COPY --from=build $JAR_FILE /app/runner.jar
 EXPOSE 4000
-COPY --from=builder /opt/app/target/*.jar /opt/app/app.jar
-USER myuser
-ENTRYPOINT ["java", "-jar", "/opt/app/app.jar"]
+ENTRYPOINT java -jar /app/runner.jar
