@@ -8,9 +8,7 @@ services:
   api-gateway:
     env_file:
       - .env-api-gateway
-    build:
-      context: api-gateway/
-      dockerfile: Dockerfile
+    image: bartoszmajkowski/auto-bids:api-gateway
     ports:
       - "0.0.0.0:4000:4000"
     networks:
@@ -20,9 +18,7 @@ services:
   profiles:
     env_file:
       - .env-profiles
-    build:
-      context: profiles/
-      dockerfile: Dockerfile
+    image: bartoszmajkowski/auto-bids:profiles
     ports:
       - "0.0.0.0:4100:4100"
     networks:
