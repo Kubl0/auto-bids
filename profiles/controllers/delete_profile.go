@@ -34,7 +34,7 @@ func DeleteProfile(c *gin.Context) {
 
 		var userCollection = service.GetCollection(service.DB, "profiles")
 
-		filter := bson.D{{"email", email}}
+		filter := bson.D{{"email", email.Email}}
 		results, err := userCollection.DeleteOne(ctx, filter)
 		if err != nil {
 			result <- responses.UserResponse{

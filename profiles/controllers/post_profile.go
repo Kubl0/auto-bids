@@ -24,8 +24,6 @@ func PostProfile(c *gin.Context) {
 		var resultModel models.PostProfile
 		validate := validator.New(validator.WithRequiredStructEnabled())
 
-		fmt.Println(resultModel)
-
 		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusBadRequest,
@@ -34,6 +32,8 @@ func PostProfile(c *gin.Context) {
 			}
 			return
 		}
+
+		fmt.Println(resultModel)
 
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
