@@ -8,9 +8,9 @@ services:
   api-gateway:
     env_file:
       - .env-api-gateway
-    image: bartoszmajkowski/auto-bids:api-gateway
+    image: autobidscloud/auto-bids:api-gateway
     ports:
-      - "0.0.0.0:4000:4000"
+      - "4000:4000"
     networks:
       - api-gateway-net
       - profiles-net
@@ -18,9 +18,9 @@ services:
   profiles:
     env_file:
       - .env-profiles
-    image: bartoszmajkowski/auto-bids:profiles
+    image: autobidscloud/auto-bids:profiles
     ports:
-      - "0.0.0.0:4100:4100"
+      - "4100:4100"
     networks:
       - api-gateway-net
       - profiles-net
