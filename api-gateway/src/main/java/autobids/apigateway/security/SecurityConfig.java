@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -28,6 +29,7 @@ public class SecurityConfig {
                         .pathMatchers("/profiles/create/me").authenticated()
                         .pathMatchers("/profiles/login/me").authenticated()
                         .pathMatchers("/profiles/delete/me").authenticated()
+                        .pathMatchers("/profiles/edit/me").authenticated()
                         .anyExchange().permitAll()
                 )
                 .oauth2Login(withDefaults())
@@ -44,13 +46,15 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(System.getenv("FRONTEND_URI")));
-        configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(List.of("*"));
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
-        return urlBasedCorsConfigurationSource;
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of(System.getenv("PROFILES_URI")));
+        corsConfig.setMaxAge(3600L);
+        corsConfig.setAllowCredentials(true);
+        corsConfig.addAllowedMethod("*");
+        corsConfig.addAllowedHeader("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+        return source;
     }
 }

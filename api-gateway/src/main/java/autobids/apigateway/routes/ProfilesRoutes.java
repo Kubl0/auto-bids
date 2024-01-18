@@ -60,7 +60,7 @@ public class ProfilesRoutes {
 
 
     @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/create/me", r -> r
                         .method("GET")
@@ -76,6 +76,37 @@ public class ProfilesRoutes {
                                                         ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
                                                         "https://media.istockphoto.com/id/1327592449/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=yqoos7g9jmufJhfkbQsk-mdhKEsih6Di4WZ66t_ib7I="
                                                 ))
+                                )
+                        )
+                        .uri(System.getenv("PROFILES_URI"))
+                ).build();
+    }
+
+
+    @Bean
+    public RouteLocator editRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/profiles/edit/me", r -> r
+                        .method("PUT")
+                        .and()
+                        .path("/profiles/edit/me")
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String newPath = path.replaceAll(
+                                                            "/profiles/edit/me",
+                                                            "/profiles/user/" + user.getAttribute("email"));
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
                                 )
                         )
                         .uri(System.getenv("PROFILES_URI"))
@@ -114,7 +145,7 @@ public class ProfilesRoutes {
     }
 
 
-    public static class Profile {
+    private static class Profile {
         private String userName;
         private String email;
         private String profileImage;
