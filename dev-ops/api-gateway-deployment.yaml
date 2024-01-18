@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: autobidscloud/auto-bids:api-gateway
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4000
+          env:
+            - name: CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CLIENT_ID
+            - name: CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CLIENT_SECRET
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: SERVER_PORT
+            - name: PROFILES_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: PROFILES_URI
+            - name: FRONTEND_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: FRONTEND_URI
+      

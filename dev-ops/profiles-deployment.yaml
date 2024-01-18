@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiles-deployment
+  labels:
+    app: profiles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profiles
+  template:
+    metadata:
+      labels:
+        app: profiles
+    spec:
+      containers:
+        - name: profiles
+          image: autobidscloud/auto-bids:profiles
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4100
+          env:
+            - name: DB_PROFILES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: profiles-config
+                  key: DB_PROFILES_HOST
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: profiles-config
+                  key: DB_NAME
+            - name: PROFILES_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: profiles-config
+                  key: PROFILES_URI
