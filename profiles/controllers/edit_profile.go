@@ -22,6 +22,17 @@ func EditProfile(c *gin.Context) {
 		var resultModel models.EditProfile
 		validate := validator.New(validator.WithRequiredStructEnabled())
 
+		email := models.Email{Email: cCp.Param("email")}
+
+		if err := validate.Struct(email); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error validation profile",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
 		if err := cCp.BindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
@@ -42,7 +53,7 @@ func EditProfile(c *gin.Context) {
 
 		var userCollection = service.GetCollection(service.DB, "profiles")
 
-		filter := bson.D{{"email", resultModel.Email}}
+		filter := bson.D{{"email", email.Email}}
 		update := bson.D{
 			{"$set", bson.D{
 				{"profile_image", resultModel.ProfileImage},

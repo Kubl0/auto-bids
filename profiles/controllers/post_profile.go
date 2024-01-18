@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
@@ -32,8 +31,6 @@ func PostProfile(c *gin.Context) {
 			}
 			return
 		}
-
-		fmt.Println(resultModel)
 
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
