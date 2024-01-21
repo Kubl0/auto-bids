@@ -46,4 +46,9 @@ spec:
                 configMapKeyRef:
                   name: api-gateway-config
                   key: FRONTEND_URI
-      
+            - name: OAUTH_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: OAUTH_URI
+
