@@ -6,7 +6,6 @@ import (
 	"cars/responses"
 	"cars/service"
 	"context"
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -52,7 +51,6 @@ func GetOffers(c *gin.Context) {
 		var userCollection = service.GetCollection(service.DB, "cars")
 
 		filter := queries.GetOfferQuery(resultModel)
-		fmt.Println(filter)
 		opts := options.Find().SetSkip((page - 1) * 10).SetLimit(limit)
 		results, err := userCollection.Find(ctx, filter, opts)
 		if err != nil {

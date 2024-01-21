@@ -21,5 +21,6 @@ type CheckOffer struct {
 	Doors             int      `json:"doors"`
 	Seats             int      `json:"seats"`
 	Condition         string   `json:"condition"`
-	Position          Position `json:"position"`
+	Location          Location `json:"location"`
+	Distance          int      `json:"distance"`
 }

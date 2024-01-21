@@ -88,5 +88,17 @@ func GetOfferQuery(offer models.CheckOffer) bson.M {
 		query["car.condition"] = offer.Condition
 	}
 
+	if len(offer.Location.Coordinates) == 2 && offer.Distance != 0 {
+		query["car.location"] = bson.M{
+			"$nearSphere": bson.M{
+				"$geometry": bson.M{
+					"type":        "Point",
+					"coordinates": offer.Location.Coordinates,
+				},
+				"$maxDistance": offer.Distance * 1000,
+			},
+		}
+	}
+
 	return query
 }

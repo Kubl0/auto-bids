@@ -34,10 +34,10 @@ type Car struct {
 	FirstRegistration  string   `json:"first_registration" bson:"first_registration"`
 	Condition          string   `json:"condition" bson:"condition"`
 	TelephoneNumber    string   `json:"telephone_number" bson:"telephone_number"`
-	Position           Position `json:"position" bson:"position"`
+	Location           Location `json:"location" bson:"location"`
 }
 
-type Position struct {
-	PositionX float32 `json:"position_x" bson:"position_x"`
-	PositionY float32 `json:"position_y" bson:"position_y"`
+type Location struct {
+	Type        string    `json:"type" bson:"type"`
+	Coordinates []float32 `json:"coordinates" bson:"coordinates"`
 }
