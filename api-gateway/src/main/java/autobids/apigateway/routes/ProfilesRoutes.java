@@ -43,7 +43,7 @@ public class ProfilesRoutes {
                                                 .map(authentication -> new Profile(
                                                         ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
                                                         ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
-                                                        "https://media.istockphoto.com/id/1327592449/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=yqoos7g9jmufJhfkbQsk-mdhKEsih6Di4WZ66t_ib7I="
+                                                        "https://static.wikia.nocookie.net/egzorcysta/images/0/0c/PapaS%C5%82o%C5%84.png/revision/latest?cb=20231119094139&path-prefix=pl"
                                                 ))
                                 )
                         )
