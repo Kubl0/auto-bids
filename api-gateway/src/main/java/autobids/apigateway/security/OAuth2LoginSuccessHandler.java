@@ -15,8 +15,7 @@ public class OAuth2LoginSuccessHandler implements ServerAuthenticationSuccessHan
 
     @Override
     public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
-        String redirectUrl = "http://localhost:3000";
-//        String redirectUrl = System.getenv("FRONTEND_URI");
+        String redirectUrl = System.getenv("FRONTEND_URI");
         ServerWebExchange serverWebExchange = webFilterExchange.getExchange();
         serverWebExchange.getResponse().getHeaders().setLocation(URI.create(redirectUrl));
         serverWebExchange.getResponse().setStatusCode(HttpStatus.SEE_OTHER);

@@ -13,8 +13,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-
 
 @Configuration
 @EnableWebFluxSecurity
@@ -51,8 +49,9 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:4000", "http://localhost:4100", "https://dev-wgrfncmy5tahnvay.us.auth0.com"));
-        //        corsConfig.setAllowedOrigins(List.of(System.getenv("FRONTEND_URI"), System.getenv("PROFILES_URI"), System.getenv("OAUTH_URI")));
+//        corsConfig.setAllowedOrigins(List.of(System.getenv("FRONTEND_URI"), System.getenv("PROFILES_URI"), System.getenv("OAUTH_URI")));
+//        corsConfig.addAllowedOrigin("*");
+        corsConfig.addAllowedOriginPattern("*");
         corsConfig.setMaxAge(3600L);
         corsConfig.setAllowCredentials(true);
         corsConfig.addAllowedMethod("*");

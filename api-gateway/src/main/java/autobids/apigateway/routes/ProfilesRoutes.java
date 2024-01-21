@@ -23,8 +23,7 @@ public class ProfilesRoutes {
         return builder.routes()
                 .route("/profiles/user/**", r -> r
                         .path("/profiles/user/**")
-                        .uri("http://localhost:4100"))
-                //.uri(System.getenv("PROFILES_URI"))
+                        .uri(System.getenv("PROFILES_URI")))
                 .build();
     }
 
@@ -48,8 +47,7 @@ public class ProfilesRoutes {
                                                 ))
                                 )
                         )
-                        .uri("http://localhost:4100")
-                        //.uri(System.getenv("PROFILES_URI"))
+                        .uri(System.getenv("PROFILES_URI"))
                 ).build();
     }
 
@@ -80,8 +78,7 @@ public class ProfilesRoutes {
                                                 .flatMap(chain::filter)
                                 )
                         )
-                        .uri("http://localhost:4100")
-                        //.uri(System.getenv("PROFILES_URI"))
+                        .uri(System.getenv("PROFILES_URI"))
                 ).build();
     }
 
@@ -112,9 +109,8 @@ public class ProfilesRoutes {
                                                 .flatMap(chain::filter)
                                 )
                         )
-                        .uri("http://localhost:4100"))
-                //.uri(System.getenv("PROFILES_URI"))
-                .build();
+                        .uri(System.getenv("PROFILES_URI"))
+                ).build();
     }
 
 
