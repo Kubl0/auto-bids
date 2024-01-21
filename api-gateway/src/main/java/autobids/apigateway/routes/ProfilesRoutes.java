@@ -23,38 +23,8 @@ public class ProfilesRoutes {
         return builder.routes()
                 .route("/profiles/user/**", r -> r
                         .path("/profiles/user/**")
-                        .uri(System.getenv("PROFILES_URI")))
-                .build();
-    }
-
-
-    @Bean
-    public RouteLocator securedProfileRoutes(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route("/profiles/login/me", r -> r
-                        .method("GET")
-                        .and()
-                        .path("/profiles/login/me")
-                        .filters(f -> f
-                                .filter((exchange, chain) ->
-                                        ReactiveSecurityContextHolder.getContext()
-                                                .map(SecurityContext::getAuthentication)
-                                                .map(authentication -> {
-                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
-                                                    ServerHttpRequest req = exchange.getRequest();
-                                                    addOriginalRequestUrl(exchange, req.getURI());
-                                                    String path = req.getURI().getRawPath();
-                                                    String newPath = path.replaceAll(
-                                                            "/profiles/login/me",
-                                                            "/profiles/user/" + user.getAttribute("email"));
-                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
-                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
-                                                    return exchange.mutate().request(request).build();
-                                                })
-                                                .flatMap(chain::filter)
-                                )
-                        )
-                        .uri(System.getenv("PROFILES_URI")))
+                        .uri("http://localhost:4100"))
+                //.uri(System.getenv("PROFILES_URI"))
                 .build();
     }
 
@@ -62,10 +32,10 @@ public class ProfilesRoutes {
     @Bean
     public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/profiles/create/me", r -> r
+                .route("/profiles/login/me", r -> r
                         .method("GET")
                         .and()
-                        .path("/profiles/create/me")
+                        .path("/profiles/login/me")
                         .filters(f -> f
                                 .setPath("/profiles/user")
                                 .modifyRequestBody(String.class, Profile.class, MediaType.APPLICATION_JSON_VALUE,
@@ -78,7 +48,8 @@ public class ProfilesRoutes {
                                                 ))
                                 )
                         )
-                        .uri(System.getenv("PROFILES_URI"))
+                        .uri("http://localhost:4100")
+                        //.uri(System.getenv("PROFILES_URI"))
                 ).build();
     }
 
@@ -109,7 +80,8 @@ public class ProfilesRoutes {
                                                 .flatMap(chain::filter)
                                 )
                         )
-                        .uri(System.getenv("PROFILES_URI"))
+                        .uri("http://localhost:4100")
+                        //.uri(System.getenv("PROFILES_URI"))
                 ).build();
     }
 
@@ -140,7 +112,8 @@ public class ProfilesRoutes {
                                                 .flatMap(chain::filter)
                                 )
                         )
-                        .uri(System.getenv("PROFILES_URI")))
+                        .uri("http://localhost:4100"))
+                //.uri(System.getenv("PROFILES_URI"))
                 .build();
     }
 
