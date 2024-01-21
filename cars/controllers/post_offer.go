@@ -2,83 +2,74 @@ package controllers
 
 import (
 	"cars/models"
-	"cars/queries"
 	"cars/responses"
 	"cars/service"
 	"context"
-	"fmt"
 	"github.com/go-playground/validator/v10"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetOffers(c *gin.Context) {
+func PostOffer(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 
 	go func(cCp *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 		defer close(result)
-		var resultModel models.CheckOffer
+		var resultCar models.Car
 		validate := validator.New(validator.WithRequiredStructEnabled())
 
-		pageStr := cCp.Param("page")
-		page, err := strconv.ParseInt(pageStr, 10, 64)
+		email := models.Email{Email: cCp.Param("email")}
 
-		if err := cCp.BindJSON(&resultModel); err != nil {
+		if err := validate.Struct(email); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
-				Message: "Error model get offer",
+				Message: "Error validation email",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
 		}
 
-		if err := validate.Struct(resultModel); err != nil {
+		if err := cCp.ShouldBindJSON(&resultCar); err != nil {
 			result <- responses.UserResponse{
-				Status:  http.StatusInternalServerError,
-				Message: "Error validation offers",
+				Status:  http.StatusBadRequest,
+				Message: "Invalid request body",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
 		}
 
-		limit := int64(10)
+		if err := validate.Struct(resultCar); err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusBadRequest,
+				Message: "Error validation car",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
 
 		var userCollection = service.GetCollection(service.DB, "cars")
-
-		filter := queries.GetOfferQuery(resultModel)
-		fmt.Println(filter)
-		opts := options.Find().SetSkip((page - 1) * 10).SetLimit(limit)
-		results, err := userCollection.Find(ctx, filter, opts)
+		newOffer := models.PostOffer{
+			UserEmail: email.Email,
+			Car:       resultCar,
+		}
+		results, err := userCollection.InsertOne(ctx, newOffer)
 		if err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
-				Message: "Error finding offers",
+				Message: "Error adding offer",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
 		}
-		var offers []models.Offer
-		if err := results.All(ctx, &offers); err != nil {
-			result <- responses.UserResponse{
-				Status:  http.StatusInternalServerError,
-				Message: "Error decoding offers",
-				Data:    map[string]interface{}{"error": err.Error()},
-			}
-			return
-		}
-
 		result <- responses.UserResponse{
-			Status:  http.StatusOK,
-			Message: "ok",
-			Data:    map[string]interface{}{"data": offers},
+			Status:  http.StatusCreated,
+			Message: "Offer created",
+			Data:    map[string]interface{}{"data": results},
 		}
-
 	}(c.Copy())
 	res := <-result
 	c.JSON(res.Status, res)
