@@ -34,7 +34,7 @@ func PostProfile(c *gin.Context) {
 
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
-				Status:  http.StatusInternalServerError,
+				Status:  http.StatusBadRequest,
 				Message: "Error validation profile",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
@@ -46,9 +46,9 @@ func PostProfile(c *gin.Context) {
 		err := userCollection.FindOne(ctx, bson.M{"email": resultModel.Email}).Decode(&existingProfile)
 		if err == nil {
 			result <- responses.UserResponse{
-				Status:  http.StatusConflict,
-				Message: "Profile with the given email already exists",
-				Data:    map[string]interface{}{"error": "Email already in use"},
+				Status:  http.StatusOK,
+				Message: "User logged",
+				Data:    map[string]interface{}{"data": existingProfile},
 			}
 			return
 		}
@@ -56,14 +56,14 @@ func PostProfile(c *gin.Context) {
 		if err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
-				Message: "Error finding profile",
+				Message: "Error adding profile",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
 		}
 		result <- responses.UserResponse{
-			Status:  http.StatusOK,
-			Message: "ok",
+			Status:  http.StatusCreated,
+			Message: "User created",
 			Data:    map[string]interface{}{"data": results},
 		}
 	}(c.Copy())
