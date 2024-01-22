@@ -3,6 +3,7 @@ version: '3'
 networks:
   api-gateway-net:
   profiles-net:
+  cars-net:
 
 services:
   api-gateway:
@@ -24,4 +25,14 @@ services:
     networks:
       - api-gateway-net
       - profiles-net
+
+  cars:
+    env_file:
+      - .env-cars
+    image: autobidscloud/auto-bids:cars
+    ports:
+      - "4200:4200"
+    networks:
+        - api-gateway-net
+        - cars-net
 
