@@ -21,7 +21,6 @@ func PostOffer(c *gin.Context) {
 		defer close(result)
 		var resultCar models.Car
 		validate := validator.New(validator.WithRequiredStructEnabled())
-
 		email := models.Email{Email: cCp.Param("email")}
 
 		if err := validate.Struct(email); err != nil {
