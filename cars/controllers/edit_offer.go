@@ -32,7 +32,7 @@ func EditOffer(c *gin.Context) {
 			}
 			return
 		}
-		if err := cCp.BindJSON(&resultModel); err != nil {
+		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error model edit_offer",

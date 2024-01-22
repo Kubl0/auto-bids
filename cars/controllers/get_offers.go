@@ -26,9 +26,18 @@ func GetOffers(c *gin.Context) {
 		validate := validator.New(validator.WithRequiredStructEnabled())
 
 		pageStr := cCp.Param("page")
-		page, err := strconv.ParseInt(pageStr, 10, 64)
 
-		if err := cCp.BindJSON(&resultModel); err != nil {
+		page, err := strconv.ParseInt(pageStr, 10, 64)
+		if err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error parse page",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
+		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error model get offer",
@@ -47,7 +56,6 @@ func GetOffers(c *gin.Context) {
 		}
 
 		limit := int64(10)
-
 		var userCollection = service.GetCollection(service.DB, "cars")
 
 		filter := queries.GetOfferQuery(resultModel)
