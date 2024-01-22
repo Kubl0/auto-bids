@@ -29,6 +29,10 @@ public class SecurityConfig {
                         .pathMatchers("/profiles/login/me").authenticated()
                         .pathMatchers("/profiles/delete/me").authenticated()
                         .pathMatchers("/profiles/edit/me").authenticated()
+                        .pathMatchers("/cars/add/me").authenticated()
+                        .pathMatchers("/cars/delete/").authenticated()
+                        .pathMatchers("/cars/delete/all/me").authenticated()
+                        .pathMatchers("/cars/edit/me").authenticated()
                         .anyExchange().permitAll()
                 )
                 .oauth2Login((oauth2Login) ->
