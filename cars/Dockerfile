@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY --from=build /app/myapp .
 
-EXPOSE 4100
+EXPOSE 4200
 ENTRYPOINT ["/app/myapp"]
 
 
