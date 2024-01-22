@@ -1,7 +1,7 @@
 package models
 
 type Offer struct {
-	Id        string `json:"_id" bson:"_id" validate:"required"`
+	Id        string `json:"id" bson:"_id" validate:"required"`
 	UserEmail string `json:"user_email" bson:"user_email" validate:"required,email"`
 	Car       Car    `json:"car" bson:"car" validate:"required"`
 }
