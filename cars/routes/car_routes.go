@@ -10,7 +10,7 @@ func CarsRoute(router *gin.Engine) {
 	{
 		profiles.POST("/page/:page", controllers.GetOffers)
 		profiles.POST("/add/:email", controllers.PostOffer)
-		//profiles.DELETE("/user/:email", controllers.DeleteProfile)
+		profiles.DELETE("/delete/:email", controllers.DeleteOffer)
 		profiles.PUT("/edit/:email", controllers.EditOffer)
 	}
 }
