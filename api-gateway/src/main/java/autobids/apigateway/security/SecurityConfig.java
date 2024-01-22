@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
-import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
-import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -20,6 +17,9 @@ public class SecurityConfig {
 
     @Autowired
     OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    @Autowired
+    OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -34,23 +34,15 @@ public class SecurityConfig {
                 .oauth2Login((oauth2Login) ->
                         oauth2Login
                                 .authenticationSuccessHandler(oAuth2LoginSuccessHandler)
+                                .authenticationFailureHandler(oAuth2LoginFailureHandler)
                 )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutHandler(new DelegatingServerLogoutHandler(
-                                        new WebSessionServerLogoutHandler(), new SecurityContextServerLogoutHandler()
-                                )
-                        )
-                )
                 .build();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-//        corsConfig.setAllowedOrigins(List.of(System.getenv("FRONTEND_URI"), System.getenv("PROFILES_URI"), System.getenv("OAUTH_URI")));
-//        corsConfig.addAllowedOrigin("*");
         corsConfig.addAllowedOriginPattern("*");
         corsConfig.setMaxAge(3600L);
         corsConfig.setAllowCredentials(true);

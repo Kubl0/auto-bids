@@ -1,5 +1,6 @@
 package autobids.apigateway.routes;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,7 @@ public class ProfilesRoutes {
                                                 .map(authentication -> new Profile(
                                                         ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
                                                         ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
-                                                        "https://static.wikia.nocookie.net/egzorcysta/images/0/0c/PapaS%C5%82o%C5%84.png/revision/latest?cb=20231119094139&path-prefix=pl"
+                                                        "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
                                                 ))
                                 )
                         )
@@ -125,6 +126,7 @@ public class ProfilesRoutes {
             this.profileImage = profileImage;
         }
 
+        @JsonGetter("user_name")
         public String getUserName() {
             return userName;
         }
@@ -133,6 +135,7 @@ public class ProfilesRoutes {
             this.userName = userName;
         }
 
+        @JsonGetter("email")
         public String getEmail() {
             return email;
         }
@@ -141,6 +144,7 @@ public class ProfilesRoutes {
             this.email = email;
         }
 
+        @JsonGetter("profile_image")
         public String getProfileImage() {
             return profileImage;
         }
