@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .pathMatchers("/cars/delete/").authenticated()
                         .pathMatchers("/cars/delete/all/me").authenticated()
                         .pathMatchers("/cars/edit/me").authenticated()
+                        .pathMatchers("/cars/user/me/**").authenticated()
                         .anyExchange().permitAll()
                 )
                 .oauth2Login((oauth2Login) ->
