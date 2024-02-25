@@ -2,27 +2,25 @@ package controllers
 
 import (
 	"cars/models"
-	"cars/queries"
 	"cars/responses"
 	"cars/service"
 	"context"
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
-func GetOffers(c *gin.Context) {
+func GetOffersByUser(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 
 	go func(cCp *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 		defer close(result)
-		var resultModel models.CheckOffer
 		validate := validator.New(validator.WithRequiredStructEnabled())
 
 		pageStr := cCp.Param("page")
@@ -37,19 +35,12 @@ func GetOffers(c *gin.Context) {
 			return
 		}
 
-		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
-			result <- responses.UserResponse{
-				Status:  http.StatusInternalServerError,
-				Message: "Error model get offer",
-				Data:    map[string]interface{}{"error": err.Error()},
-			}
-			return
-		}
+		email := models.Email{Email: cCp.Param("email")}
 
-		if err := validate.Struct(resultModel); err != nil {
+		if err := validate.Struct(email); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
-				Message: "Error validation offers",
+				Message: "Error validation email",
 				Data:    map[string]interface{}{"error": err.Error()},
 			}
 			return
@@ -58,7 +49,7 @@ func GetOffers(c *gin.Context) {
 		limit := int64(10)
 		var userCollection = service.GetCollection(service.DB, "cars")
 
-		filter := queries.GetOfferQuery(resultModel)
+		filter := bson.M{"user_email": email.Email}
 		opts := options.Find().SetSkip((page - 1) * 10).SetLimit(limit)
 		results, err := userCollection.Find(ctx, filter, opts)
 		if err != nil {

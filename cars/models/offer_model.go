@@ -20,8 +20,8 @@ type Car struct {
 	Photos             []string `json:"photos" bson:"photos" validate:"required"`
 	Year               int      `json:"year" bson:"year" validate:"required"`
 	Mileage            int      `json:"mileage" bson:"mileage"`
-	VinNumber          int      `json:"vin_number" bson:"vin_number"`
-	EngineCapacity     string   `json:"engine_capacity" bson:"engine_capacity"`
+	VinNumber          string   `json:"vin_number" bson:"vin_number"`
+	EngineCapacity     int      `json:"engine_capacity" bson:"engine_capacity"`
 	Fuel               string   `json:"fuel" bson:"fuel"`
 	Transmission       string   `json:"transmission" bson:"transmission"`
 	Steering           string   `json:"steering" bson:"steering"`
