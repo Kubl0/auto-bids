@@ -158,8 +158,8 @@ public class Routes {
     @Bean
     public RouteLocator carsRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/page/**", r -> r
-                        .path("/cars/page/**")
+                .route("/cars/offers/page/**", r -> r
+                        .path("/cars/offers/page/**")
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
@@ -167,8 +167,8 @@ public class Routes {
     @Bean
     public RouteLocator getOneCarRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/offer/**", r -> r
-                        .path("/cars/offer/**")
+                .route("/cars/offers/**", r -> r
+                        .path("/cars/offers/**")
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
@@ -296,10 +296,10 @@ public class Routes {
     @Bean
     public RouteLocator getCurrentUserCarsRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/user/me/{page}", r -> r
+                .route("/cars/offer/user/me/{page}", r -> r
                         .method("GET")
                         .and()
-                        .path("/cars/user/me/**")
+                        .path("/cars/offer/user/me/**")
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -312,8 +312,8 @@ public class Routes {
                                                     String[] pathSegments = path.split("/");
                                                     String page = pathSegments[pathSegments.length - 1];
                                                     String newPath = path.replaceAll(
-                                                            "/cars/user/me/[^/]+",
-                                                            "/cars/user/" + user.getAttribute("email")) + "/" + page;
+                                                            "/cars/offer/user/me/[^/]+",
+                                                            "/cars/offer/user/" + user.getAttribute("email")) + "/" + page;
                                                     ServerHttpRequest request = req.mutate().path(newPath).build();
                                                     exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, request.getURI());
                                                     return exchange.mutate().request(request).build();
@@ -328,8 +328,8 @@ public class Routes {
     @Bean
     public RouteLocator getUserCarsRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/user/**", r -> r
-                        .path("/cars/user/**")
+                .route("/cars/offers/user/**", r -> r
+                        .path("/cars/offers/user/**")
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
