@@ -6,6 +6,7 @@ import (
 	"cars/responses"
 	"cars/service"
 	"context"
+	"fmt"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -37,7 +38,7 @@ func GetOffers(c *gin.Context) {
 			return
 		}
 
-		if err := cCp.ShouldBindJSON(&resultModel); err != nil {
+		if err := cCp.ShouldBind(&resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "Error model get offer",
@@ -45,6 +46,8 @@ func GetOffers(c *gin.Context) {
 			}
 			return
 		}
+
+		fmt.Println(resultModel)
 
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
