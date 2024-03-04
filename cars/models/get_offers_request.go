@@ -1,8 +1,8 @@
 package models
 
 type CheckOffer struct {
-	Make              string   `json:"make" form:"make"`
-	Model             string   `json:"model" form:"model"`
+	Make              string   `json:"make" form:"make" validate:"max=30"`
+	Model             string   `json:"model" form:"model" validate:"max=30"`
 	PriceMin          int      `json:"price_min" form:"price_min"`
 	PriceMax          int      `json:"price_max" form:"price_max"`
 	MileageMin        int      `json:"mileage_min" form:"mileage_min"`
@@ -22,5 +22,5 @@ type CheckOffer struct {
 	Seats             int      `json:"seats" form:"seats"`
 	Condition         string   `json:"condition" form:"condition"`
 	Location          Location `json:"location" form:"location"`
-	Distance          int      `json:"distance" form:"distance"`
+	Distance          int      `json:"distance" form:"distance" validate:"max=1000"`
 }

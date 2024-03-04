@@ -12,11 +12,11 @@ type PostOffer struct {
 }
 
 type Car struct {
-	Title              string   `json:"title" bson:"title" validate:"required"`
-	Make               string   `json:"make" bson:"make" validate:"required"`
-	Model              string   `json:"model" bson:"model" validate:"required"`
+	Title              string   `json:"title" bson:"title" validate:"required, max=40"`
+	Make               string   `json:"make" bson:"make" validate:"required, max=30"`
+	Model              string   `json:"model" bson:"model" validate:"required, max=30"`
 	Price              int      `json:"price" bson:"price" validate:"required"`
-	Description        string   `json:"description" bson:"description" validate:"required"`
+	Description        string   `json:"description" bson:"description" validate:"required, max=500"`
 	Photos             []string `json:"photos" bson:"photos" validate:"required"`
 	Year               int      `json:"year" bson:"year" validate:"required"`
 	Mileage            int      `json:"mileage" bson:"mileage"`
