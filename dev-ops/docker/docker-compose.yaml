@@ -4,6 +4,7 @@ networks:
   api-gateway-net:
   profiles-net:
   cars-net:
+  chat-net:
 
 services:
   api-gateway:
@@ -33,6 +34,14 @@ services:
     ports:
       - "4200:4200"
     networks:
-        - api-gateway-net
-        - cars-net
-
+      - api-gateway-net
+      - cars-net
+  chat:
+    env_file:
+      - .env-chat
+    image: autobidscloud/auto-bids:chat
+    ports:
+      - "4500:4500"
+    networks:
+      - api-gateway-net
+      - chat-net
