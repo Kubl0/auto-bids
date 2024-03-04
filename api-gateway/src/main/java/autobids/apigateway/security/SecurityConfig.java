@@ -1,5 +1,6 @@
 package autobids.apigateway.security;
 
+import autobids.apigateway.UriConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,14 +27,14 @@ public class SecurityConfig {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/profiles/login/me").authenticated()
-                        .pathMatchers("/profiles/delete/me").authenticated()
-                        .pathMatchers("/profiles/edit/me").authenticated()
-                        .pathMatchers("/cars/add/me").authenticated()
-                        .pathMatchers("/cars/delete/").authenticated()
-                        .pathMatchers("/cars/delete/all/me").authenticated()
-                        .pathMatchers("/cars/edit/me").authenticated()
-                        .pathMatchers("/cars/offer/user/me/**").authenticated()
+                        .pathMatchers(UriConstants.PROFILES_LOGIN).authenticated()
+                        .pathMatchers(UriConstants.PROFILES_DELETE).authenticated()
+                        .pathMatchers(UriConstants.PROFILES_EDIT).authenticated()
+                        .pathMatchers(UriConstants.CARS_ADD).authenticated()
+                        .pathMatchers(UriConstants.CARS_DELETE).authenticated()
+                        .pathMatchers(UriConstants.CARS_DELETE_ALL).authenticated()
+                        .pathMatchers(UriConstants.CARS_EDIT).authenticated()
+                        .pathMatchers(UriConstants.CARS_SEARCH_ME).authenticated()
                         .anyExchange().permitAll()
                 )
                 .oauth2Login((oauth2Login) ->

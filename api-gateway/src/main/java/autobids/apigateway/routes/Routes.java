@@ -1,5 +1,6 @@
 package autobids.apigateway.routes;
 
+import autobids.apigateway.UriConstants;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -23,7 +24,7 @@ public class Routes {
     public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/user/**", r -> r
-                        .path("/profiles/user/**")
+                        .path(UriConstants.PROFILES_USER_ROUTES)
                         .uri(System.getenv("PROFILES_URI")))
                 .build();
     }
@@ -35,7 +36,7 @@ public class Routes {
                 .route("/profiles/login/me", r -> r
                         .method("GET")
                         .and()
-                        .path("/profiles/login/me")
+                        .path(UriConstants.PROFILES_LOGIN)
                         .filters(f -> f
                                 .setPath("/profiles/user")
                                 .modifyRequestBody(String.class, Profile.class, MediaType.APPLICATION_JSON_VALUE,
@@ -59,7 +60,7 @@ public class Routes {
                 .route("/profiles/edit/me", r -> r
                         .method("PUT")
                         .and()
-                        .path("/profiles/edit/me")
+                        .path(UriConstants.PROFILES_EDIT)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -90,7 +91,7 @@ public class Routes {
                 .route("/profiles/delete/me", r -> r
                         .method("DELETE")
                         .and()
-                        .path("/profiles/delete/me")
+                        .path(UriConstants.PROFILES_DELETE)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -156,10 +157,10 @@ public class Routes {
 
 
     @Bean
-    public RouteLocator carsRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator getCarRoutesByPage(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/offers/page/**", r -> r
-                        .path("/cars/offers/page/**")
+                .route("/cars/search/{page}", r -> r
+                        .path(UriConstants.CARS_SEARCH)
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
@@ -167,8 +168,8 @@ public class Routes {
     @Bean
     public RouteLocator getOneCarRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/offers/**", r -> r
-                        .path("/cars/offers/**")
+                .route("/cars/details/{id}", r -> r
+                        .path(UriConstants.CARS_DETAILS)
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
@@ -179,7 +180,7 @@ public class Routes {
                 .route("/cars/add/me", r -> r
                         .method("POST")
                         .and()
-                        .path("/cars/add/me")
+                        .path(UriConstants.CARS_ADD)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -209,7 +210,7 @@ public class Routes {
                 .route("/cars/delete/me", r -> r
                         .method("DELETE")
                         .and()
-                        .path("/cars/delete/me")
+                        .path(UriConstants.CARS_DELETE)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -239,7 +240,7 @@ public class Routes {
                 .route("/cars/delete/all/me", r -> r
                         .method("DELETE")
                         .and()
-                        .path("/cars/delete/all/me")
+                        .path(UriConstants.CARS_DELETE_ALL)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -269,7 +270,7 @@ public class Routes {
                 .route("/cars/edit/me", r -> r
                         .method("PUT")
                         .and()
-                        .path("/cars/edit/me")
+                        .path(UriConstants.CARS_EDIT)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -296,10 +297,10 @@ public class Routes {
     @Bean
     public RouteLocator getCurrentUserCarsRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/offer/user/me/{page}", r -> r
+                .route("/cars/search/user/me/{page}", r -> r
                         .method("GET")
                         .and()
-                        .path("/cars/offer/user/me/**")
+                        .path(UriConstants.CARS_SEARCH_ME_ROUTES)
                         .filters(f -> f
                                 .filter((exchange, chain) ->
                                         ReactiveSecurityContextHolder.getContext()
@@ -328,8 +329,8 @@ public class Routes {
     @Bean
     public RouteLocator getUserCarsRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/cars/offers/user/**", r -> r
-                        .path("/cars/offers/user/**")
+                .route("/cars/search/user/**", r -> r
+                        .path(UriConstants.CARS_SEARCH_USER)
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
