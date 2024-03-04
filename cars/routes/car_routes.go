@@ -8,9 +8,9 @@ import (
 func CarsRoute(router *gin.Engine) {
 	profiles := router.Group("/cars")
 	{
-		profiles.GET("/offer/:id", controllers.GetOneOffer)
-		profiles.GET("/offer/user/:email/:page", controllers.GetOffersByUser)
-		profiles.GET("/offers/:page", controllers.GetOffers)
+		profiles.GET("/details/:id", controllers.GetOneOffer)
+		profiles.GET("/search/user/:email/:page", controllers.GetOffersByUser)
+		profiles.GET("/search/:page", controllers.GetOffers)
 		profiles.POST("/add/:email", controllers.PostOffer)
 		profiles.DELETE("/delete/:email", controllers.DeleteOffer)
 		profiles.DELETE("/delete/all/:email", controllers.DeleteAllUserOffer)

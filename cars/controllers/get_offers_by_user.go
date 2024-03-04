@@ -71,10 +71,20 @@ func GetOffersByUser(c *gin.Context) {
 			return
 		}
 
+		numberOfOffers, err := userCollection.CountDocuments(ctx, filter)
+		if err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error counting offers",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
 		result <- responses.UserResponse{
 			Status:  http.StatusOK,
 			Message: "ok",
-			Data:    map[string]interface{}{"data": offers, "number_of_pages": (len(offers) + 10 - 1) / 10},
+			Data:    map[string]interface{}{"data": offers, "number_of_pages": (numberOfOffers + 10 - 1) / 10},
 		}
 
 	}(c.Copy())

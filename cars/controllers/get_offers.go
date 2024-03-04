@@ -6,7 +6,6 @@ import (
 	"cars/responses"
 	"cars/service"
 	"context"
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -47,8 +46,6 @@ func GetOffers(c *gin.Context) {
 			return
 		}
 
-		fmt.Println(resultModel)
-
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
@@ -73,6 +70,16 @@ func GetOffers(c *gin.Context) {
 			return
 		}
 
+		numberOfOffers, err := userCollection.CountDocuments(ctx, filter)
+		if err != nil {
+			result <- responses.UserResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "Error counting offers",
+				Data:    map[string]interface{}{"error": err.Error()},
+			}
+			return
+		}
+
 		var offers []models.Offer
 		if err := results.All(ctx, &offers); err != nil {
 			result <- responses.UserResponse{
@@ -86,7 +93,7 @@ func GetOffers(c *gin.Context) {
 		result <- responses.UserResponse{
 			Status:  http.StatusOK,
 			Message: "ok",
-			Data:    map[string]interface{}{"data": offers, "number_of_pages": (len(offers) + 10 - 1) / 10},
+			Data:    map[string]interface{}{"data": offers, "number_of_pages": (numberOfOffers + 10 - 1) / 10},
 		}
 
 	}(c.Copy())
