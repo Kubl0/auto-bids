@@ -7,6 +7,7 @@ import (
 	"cars/service"
 	"context"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"strconv"
@@ -59,7 +60,8 @@ func GetOffers(c *gin.Context) {
 		var userCollection = service.GetCollection(service.DB, "cars")
 
 		filter := queries.GetOfferQuery(resultModel)
-		opts := options.Find().SetSkip((page - 1) * 10).SetLimit(limit)
+		opts := getOptions(page, limit, resultModel)
+
 		results, err := userCollection.Find(ctx, filter, opts)
 		if err != nil {
 			result <- responses.UserResponse{
@@ -99,4 +101,19 @@ func GetOffers(c *gin.Context) {
 	}(c.Copy())
 	res := <-result
 	c.JSON(res.Status, res)
+}
+
+func ifSortExist(offer models.CheckOffer) bool {
+	if offer.SortDirection != 0 && offer.FilterBy != "" {
+		return true
+	}
+	return false
+}
+
+func getOptions(page int64, limit int64, resultModel models.CheckOffer) *options.FindOptions {
+	if ifSortExist(resultModel) {
+		sort := bson.D{{"car." + resultModel.FilterBy, resultModel.SortDirection}}
+		return options.Find().SetSort(sort).SetSkip((page - 1) * 10).SetLimit(limit)
+	}
+	return options.Find().SetSkip((page - 1) * 10).SetLimit(limit)
 }

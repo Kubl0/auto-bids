@@ -23,4 +23,6 @@ type CheckOffer struct {
 	Condition         string   `json:"condition" form:"condition"`
 	Location          Location `json:"location" form:"location"`
 	Distance          int      `json:"distance" form:"distance" validate:"max=1000"`
+	FilterBy          string   `json:"filter_by" form:"filter_by"`
+	SortDirection     int      `json:"sort_direction" form:"sort_direction"`
 }
