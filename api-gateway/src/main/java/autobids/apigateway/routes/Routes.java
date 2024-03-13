@@ -42,11 +42,16 @@ public class Routes {
                                 .modifyRequestBody(String.class, Profile.class, MediaType.APPLICATION_JSON_VALUE,
                                         (exchange, s) -> ReactiveSecurityContextHolder.getContext()
                                                 .map(SecurityContext::getAuthentication)
-                                                .map(authentication -> new Profile(
-                                                        ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
-                                                        ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
-                                                        "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
-                                                ))
+                                                .map(authentication -> {
+                                                    System.out.println(authentication.getPrincipal());
+                                                    System.out.println(authentication.getAuthorities()); //w authorities tylko sa scope_emai, scope_profile, scope_openid, role_user i tyle // nie mam pojecia co jest 5
+                                                    return new Profile(
+                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
+                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
+                                                                "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
+//                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("userRoles")
+                                                        );
+                                                })
                                 )
                         )
                         .uri(System.getenv("PROFILES_URI"))
@@ -121,10 +126,15 @@ public class Routes {
         private String email;
         private String profileImage;
 
+//        private ArrayList<String> roles;
+
         public Profile(String userName, String email, String profileImage) {
             this.userName = userName;
             this.email = email;
             this.profileImage = profileImage;
+//            this.roles = roles;
+//
+//            System.out.println("Profile: " + userName + " " + email + " " + profileImage + " " + roles);
         }
 
         @JsonGetter("user_name")
@@ -153,6 +163,14 @@ public class Routes {
         public void setProfileImage(String profileImage) {
             this.profileImage = profileImage;
         }
+
+//        public ArrayList<String> getRoles() {
+//            return roles;
+//        }
+//
+//        public void setRoles(ArrayList<String> roles) {
+//            this.roles = roles;
+//        }
     }
 
 
