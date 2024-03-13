@@ -313,8 +313,8 @@ public class Routes {
                                                     String[] pathSegments = path.split("/");
                                                     String page = pathSegments[pathSegments.length - 1];
                                                     String newPath = path.replaceAll(
-                                                            "/cars/offer/user/me/[^/]+",
-                                                            "/cars/offer/user/" + user.getAttribute("email")) + "/" + page;
+                                                            "/cars/search/user/me/[^/]+",
+                                                            "/cars/search/user/" + user.getAttribute("email")) + "/" + page;
                                                     ServerHttpRequest request = req.mutate().path(newPath).build();
                                                     exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, request.getURI());
                                                     return exchange.mutate().request(request).build();
