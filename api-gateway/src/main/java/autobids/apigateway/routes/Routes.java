@@ -2,36 +2,23 @@ package autobids.apigateway.routes;
 
 import autobids.apigateway.UriConstants;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.addOriginalRequestUrl;
 
 
 @Component
-@RestController
 public class Routes {
 
-
-    // Przykładowe wykorzystanie tego admina na jakichś tam endpointach
     @Bean
     public RouteLocator adminRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -69,29 +56,6 @@ public class Routes {
                                                         "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
                                                 ))
                                 )
-                                .modifyResponseBody(String.class, String.class, MediaType.APPLICATION_JSON_VALUE, (exchange, s) -> {
-                                    ObjectMapper objectMapper = new ObjectMapper();
-                                    try {
-                                        ObjectNode originalJson = (ObjectNode) objectMapper.readTree(s);
-                                        return ReactiveSecurityContextHolder.getContext()
-                                                .map(SecurityContext::getAuthentication)
-                                                .flatMap(authentication -> {
-                                                    if (authentication != null) {
-                                                        List<String> roles = authentication.getAuthorities().stream()
-                                                                .map(GrantedAuthority::getAuthority)
-                                                                .filter(role -> !Arrays.asList("OIDC_USER", "SCOPE_email", "SCOPE_openid", "SCOPE_profile").contains(role))
-                                                                .collect(Collectors.toList());
-
-                                                        ObjectNode userData = (ObjectNode) originalJson.at("/data/data");
-                                                        ArrayNode rolesArray = objectMapper.valueToTree(roles);
-                                                        userData.put("roles", rolesArray);
-                                                    }
-                                                    return Mono.just(originalJson.toString());
-                                                });
-                                    } catch (Exception e) {
-                                        return Mono.error(e);
-                                    }
-                                })
                         )
                         .uri(System.getenv("PROFILES_URI"))
                 ).build();
