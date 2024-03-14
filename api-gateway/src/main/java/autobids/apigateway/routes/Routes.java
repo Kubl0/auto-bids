@@ -2,23 +2,48 @@ package autobids.apigateway.routes;
 
 import autobids.apigateway.UriConstants;
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.addOriginalRequestUrl;
 
 
 @Component
+@RestController
 public class Routes {
 
+
+    // Przykladowe wykorzystanie tego admina na jakichs tam endpointach
+    @Bean
+    public RouteLocator adminRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES)
+                        .uri("http://localhost:4000"))
+                .build();
+    }
 
     @Bean
     public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
@@ -42,17 +67,35 @@ public class Routes {
                                 .modifyRequestBody(String.class, Profile.class, MediaType.APPLICATION_JSON_VALUE,
                                         (exchange, s) -> ReactiveSecurityContextHolder.getContext()
                                                 .map(SecurityContext::getAuthentication)
-                                                .map(authentication -> {
-                                                    System.out.println(authentication.getPrincipal());
-                                                    System.out.println(authentication.getAuthorities()); //w authorities tylko sa scope_emai, scope_profile, scope_openid, role_user i tyle // nie mam pojecia co jest 5
-                                                    return new Profile(
-                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
-                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
-                                                                "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
-//                                                                ((OAuth2User) authentication.getPrincipal()).getAttribute("userRoles")
-                                                        );
-                                                })
+                                                .map(authentication -> new Profile(
+                                                        ((OAuth2User) authentication.getPrincipal()).getAttribute("name"),
+                                                        ((OAuth2User) authentication.getPrincipal()).getAttribute("email"),
+                                                        "https://pbs.twimg.com/profile_images/1151437589062266880/AuZyoH2__400x400.jpg"
+                                                ))
                                 )
+                                .modifyResponseBody(String.class, String.class, MediaType.APPLICATION_JSON_VALUE, (exchange, s) -> {
+                                    ObjectMapper objectMapper = new ObjectMapper();
+                                    try {
+                                        ObjectNode originalJson = (ObjectNode) objectMapper.readTree(s);
+                                        return ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .flatMap(authentication -> {
+                                                    if (authentication != null) {
+                                                        List<String> roles = authentication.getAuthorities().stream()
+                                                                .map(GrantedAuthority::getAuthority)
+                                                                .filter(role -> !Arrays.asList("OIDC_USER", "SCOPE_email", "SCOPE_openid", "SCOPE_profile").contains(role))
+                                                                .collect(Collectors.toList());
+
+                                                        ObjectNode userData = (ObjectNode) originalJson.at("/data/data");
+                                                        ArrayNode rolesArray = objectMapper.valueToTree(roles);
+                                                        userData.put("roles", rolesArray);
+                                                    }
+                                                    return Mono.just(originalJson.toString());
+                                                });
+                                    } catch (Exception e) {
+                                        return Mono.error(e);
+                                    }
+                                })
                         )
                         .uri(System.getenv("PROFILES_URI"))
                 ).build();
@@ -120,21 +163,16 @@ public class Routes {
                 ).build();
     }
 
-
     private static class Profile {
         private String userName;
         private String email;
         private String profileImage;
 
-//        private ArrayList<String> roles;
 
         public Profile(String userName, String email, String profileImage) {
             this.userName = userName;
             this.email = email;
             this.profileImage = profileImage;
-//            this.roles = roles;
-//
-//            System.out.println("Profile: " + userName + " " + email + " " + profileImage + " " + roles);
         }
 
         @JsonGetter("user_name")
@@ -163,14 +201,6 @@ public class Routes {
         public void setProfileImage(String profileImage) {
             this.profileImage = profileImage;
         }
-
-//        public ArrayList<String> getRoles() {
-//            return roles;
-//        }
-//
-//        public void setRoles(ArrayList<String> roles) {
-//            this.roles = roles;
-//        }
     }
 
 
