@@ -22,25 +22,26 @@ public class SecurityConfig {
     @Autowired
     OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
+                .oauth2Login(oauth2 -> oauth2
+                        .authenticationSuccessHandler(oAuth2LoginSuccessHandler)
+                        .authenticationFailureHandler(oAuth2LoginFailureHandler)
+                )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(UriConstants.PROFILES_LOGIN).authenticated()
-                        .pathMatchers(UriConstants.PROFILES_DELETE).authenticated()
-                        .pathMatchers(UriConstants.PROFILES_EDIT).authenticated()
-                        .pathMatchers(UriConstants.CARS_ADD).authenticated()
-                        .pathMatchers(UriConstants.CARS_DELETE).authenticated()
-                        .pathMatchers(UriConstants.CARS_DELETE_ALL).authenticated()
-                        .pathMatchers(UriConstants.CARS_EDIT).authenticated()
-                        .pathMatchers(UriConstants.CARS_SEARCH_ME).authenticated()
+                        .pathMatchers(UriConstants.PROFILES_LOGIN).hasAuthority("USER")
+                        .pathMatchers(UriConstants.PROFILES_DELETE).hasAuthority("USER")
+                        .pathMatchers(UriConstants.PROFILES_EDIT).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CARS_ADD).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CARS_DELETE).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CARS_DELETE_ALL).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CARS_EDIT).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CARS_SEARCH_ME).hasAuthority("USER")
+                        .pathMatchers(UriConstants.ADMIN_ROUTES).hasAuthority("ADMIN")
                         .anyExchange().permitAll()
-                )
-                .oauth2Login((oauth2Login) ->
-                        oauth2Login
-                                .authenticationSuccessHandler(oAuth2LoginSuccessHandler)
-                                .authenticationFailureHandler(oAuth2LoginFailureHandler)
                 )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .build();

@@ -13,3 +13,4 @@ okta:
     issuer: ${OAUTH_URI}
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
+    groups-claim: ${FRONTEND_URI}/roles
