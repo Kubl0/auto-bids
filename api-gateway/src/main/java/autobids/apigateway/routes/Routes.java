@@ -2,7 +2,6 @@ package autobids.apigateway.routes;
 
 import autobids.apigateway.UriConstants;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,10 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
@@ -35,7 +31,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.a
 public class Routes {
 
 
-    // Przykladowe wykorzystanie tego admina na jakichs tam endpointach
+    // Przykładowe wykorzystanie tego admina na jakichś tam endpointach
     @Bean
     public RouteLocator adminRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
