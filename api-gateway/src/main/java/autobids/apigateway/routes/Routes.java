@@ -18,21 +18,20 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.a
 
 @Component
 public class Routes {
-
-    @Bean
-    public RouteLocator adminRoutes(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route("/admin/**", r -> r
-                        .path(UriConstants.ADMIN_ROUTES)
-                        .uri("http://localhost:4000"))
-                .build();
-    }
-
     @Bean
     public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/user/**", r -> r
                         .path(UriConstants.PROFILES_USER_ROUTES)
+                        .uri(System.getenv("PROFILES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES)
                         .uri(System.getenv("PROFILES_URI")))
                 .build();
     }
