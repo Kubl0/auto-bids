@@ -16,4 +16,9 @@ func CarsRoute(router *gin.Engine) {
 		profiles.DELETE("/delete/all/:email", controllers.DeleteAllUserOffer)
 		profiles.PUT("/edit/:email", controllers.EditOffer)
 	}
+
+	adminProfiles := router.Group("/admin/cars")
+	{
+		adminProfiles.DELETE("/delete/:email", controllers.DeleteOffer)
+	}
 }
