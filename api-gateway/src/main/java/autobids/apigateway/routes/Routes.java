@@ -110,7 +110,7 @@ public class Routes {
                                                     String path = req.getURI().getRawPath();
                                                     String newPath = path.replaceAll(
                                                             "/profiles/delete/me",
-                                                            "/profiles/user/" + user.getAttribute("email"));
+                                                            "/profiles/delete/" + user.getAttribute("email"));
                                                     exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
                                                     ServerHttpRequest request = req.mutate().path(newPath).build();
                                                     return exchange.mutate().request(request).build();
