@@ -18,6 +18,21 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.a
 
 @Component
 public class Routes {
+
+    @Bean
+    public RouteLocator chatRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(p -> p
+                        .path("/ws/chat/**")
+                        .uri("ws://" + System.getenv("CHAT_URI"))
+                )
+                .route(p -> p
+                        .path("/chat/**")
+                        .uri("http://" + System.getenv("CHAT_URI"))
+                )
+                .build();
+    }
+
     @Bean
     public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
