@@ -12,6 +12,18 @@ import (
 	"time"
 )
 
+// EditProfile godoc
+// @Summary Edit a profile
+// @Description Edit a user profile by email
+// @ID edit-profile
+// @Produce json
+// @Param email path string true "Email address of the profile to be edited"
+// @Param userData body models.EditProfile true "User data to be edited"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /profiles/user/{email} [put]
 func EditProfile(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

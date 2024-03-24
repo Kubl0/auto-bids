@@ -13,6 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// GetProfile godoc
+// @Summary Get a profile
+// @Description Get a user profile by email
+// @ID get-profile
+// @Produce json
+// @Param email path string true "Email address of the profile to be retrieved"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /profiles/user/{email} [get]
 func GetProfile(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 
