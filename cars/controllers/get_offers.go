@@ -16,6 +16,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetOffers godoc
+// @Summary Get offers
+// @Description Get offers by filter
+// @ID get-offers
+// @Produce json
+// @Param page path string true "Page number"
+// @Param userData query models.CheckOffer true "User data to be edited"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/search/{page} [get]
 func GetOffers(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

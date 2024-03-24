@@ -13,6 +13,18 @@ import (
 	"time"
 )
 
+// DeleteOffer godoc
+// @Summary Delete offer
+// @Description Delete all offers by user email
+// @ID delete-offer
+// @Produce json
+// @Param email path string true "Email address of the user to delete offer"
+// @Param id body models.Id true "ID of the offer to delete"
+// @Success 200
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/delete/{email} [delete]
 func DeleteOffer(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

@@ -14,6 +14,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetOneOffer godoc
+// @Summary Get an offer
+// @Description Get a user offer by id
+// @ID get-offer
+// @Produce json
+// @Param id path string true "Id of the offer to be retrieved"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/details/{id} [get]
 func GetOneOffer(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 
