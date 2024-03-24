@@ -27,21 +27,12 @@ public class Routes {
                 .build();
     }
 
-    @Bean
-    public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route("/admin/**", r -> r
-                        .path(UriConstants.ADMIN_ROUTES)
-                        .uri(System.getenv("PROFILES_URI")))
-                .build();
-    }
-
 
     @Bean
     public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/login/me", r -> r
-                        .method("GET")
+                        .method("POST")
                         .and()
                         .path(UriConstants.PROFILES_LOGIN)
                         .filters(f -> f
