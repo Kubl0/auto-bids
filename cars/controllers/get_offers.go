@@ -47,6 +47,8 @@ func GetOffers(c *gin.Context) {
 			return
 		}
 
+		//fmt.Println(resultModel.Location.Coordinates)
+
 		if err := validate.Struct(resultModel); err != nil {
 			result <- responses.UserResponse{
 				Status:  http.StatusInternalServerError,
