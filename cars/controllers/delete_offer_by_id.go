@@ -30,7 +30,7 @@ func DeleteOfferById(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 
 		filter := bson.D{{"_id", objectId}}
 		results, err := userCollection.DeleteOne(ctx, filter)

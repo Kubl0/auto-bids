@@ -50,7 +50,7 @@ func PostOffer(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 		newOffer := models.PostOffer{
 			UserEmail: email.Email,
 			Car:       resultCar,

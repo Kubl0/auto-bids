@@ -47,7 +47,7 @@ func GetOffersByUser(c *gin.Context) {
 		}
 
 		limit := int64(10)
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 
 		filter := bson.M{"user_email": email.Email}
 		opts := options.Find().SetSkip((page - 1) * 10).SetLimit(limit)

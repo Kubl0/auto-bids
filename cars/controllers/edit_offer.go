@@ -48,7 +48,7 @@ func EditOffer(c *gin.Context) {
 			}
 			return
 		}
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 		objectId, err := primitive.ObjectIDFromHex(resultModel.Id)
 		if err != nil {
 			result <- responses.UserResponse{

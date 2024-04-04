@@ -44,7 +44,7 @@ func GetOneOffer(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 
 		filter := bson.D{{"_id", objectId}}
 		err = userCollection.FindOne(ctx, filter).Decode(&resultModel)

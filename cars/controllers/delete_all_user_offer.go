@@ -31,7 +31,7 @@ func DeleteAllUserOffer(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 
 		filter := bson.D{{"user_email", email.Email}}
 		results, err := userCollection.DeleteMany(ctx, filter)
