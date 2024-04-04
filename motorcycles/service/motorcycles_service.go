@@ -16,7 +16,7 @@ func ConnectDB() *mongo.Client {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	client, err := mongo.Connect(
 		ctx, options.Client().ApplyURI(
-			os.Getenv("DB_PROFILES_HOST")).SetServerAPIOptions(serverAPI),
+			os.Getenv("DB_MOTORCYCLES_HOST")).SetServerAPIOptions(serverAPI),
 	)
 	if err != nil {
 		log.Fatal(err)
