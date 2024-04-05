@@ -41,7 +41,7 @@ func PostProfile(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "profiles")
+		var userCollection = service.GetCollection(service.DB)
 		existingProfile := models.PostProfile{}
 		err := userCollection.FindOne(ctx, bson.M{"email": resultModel.Email}).Decode(&existingProfile)
 		if err == nil {

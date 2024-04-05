@@ -34,7 +34,7 @@ func GetProfile(c *gin.Context) {
 			return
 		}
 
-		var userCollection = service.GetCollection(service.DB, "profiles")
+		var userCollection = service.GetCollection(service.DB)
 		err := userCollection.FindOne(ctx, bson.D{{"email", email.Email}}).Decode(&resultModel)
 		if err != nil {
 			result <- responses.UserResponse{
