@@ -30,9 +30,18 @@ public class Routes {
     @Bean
     public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/admin/**", r -> r
-                        .path(UriConstants.ADMIN_ROUTES)
+                .route("/admin/profiles/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES_PROFILES)
                         .uri(System.getenv("PROFILES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator adminCarsRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/cars/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES_CARS)
+                        .uri(System.getenv("CARS_URI")))
                 .build();
     }
 

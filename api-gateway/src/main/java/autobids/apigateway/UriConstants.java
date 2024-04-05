@@ -1,7 +1,9 @@
 package autobids.apigateway;
 
 public final class UriConstants {
-    public static final String ADMIN_ROUTES = "/admin/**";
+    public static final String ADMIN_ROUTES_PROFILES = "/admin/profiles/**";
+    public static final String ADMIN_ROUTES_CARS = "/admin/cars/**";
+
     public static final String PROFILES_USER = "/profiles/user/**";
     public static final String PROFILES_USER_ROUTES = "/profiles/user/{email}";
     public static final String PROFILES_LOGIN = "/profiles/login/me";
