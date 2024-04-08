@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .pathMatchers(UriConstants.CARS_EDIT).hasAuthority("USER")
                         .pathMatchers(UriConstants.CARS_SEARCH_ME).hasAuthority("USER")
                         .pathMatchers(UriConstants.ADMIN_ROUTES).hasAuthority("ADMIN")
+                        .pathMatchers(UriConstants.CHAT_ROUTES).hasAuthority("USER")
                         .anyExchange().permitAll()
                 )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
