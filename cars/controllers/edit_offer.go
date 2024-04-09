@@ -13,6 +13,18 @@ import (
 	"time"
 )
 
+// EditOffer godoc
+// @Summary Edit an offer
+// @Description Edit a user offer by email
+// @ID edit-offer
+// @Produce json
+// @Param email path string true "Email address of the offer to be edited"
+// @Param userData body models.EditOffer true "User data to be edited"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/edit/{email} [put]
 func EditOffer(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

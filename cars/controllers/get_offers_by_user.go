@@ -14,6 +14,18 @@ import (
 	"time"
 )
 
+// GetOffersByUser godoc
+// @Summary Get offers by user
+// @Description Get a user offers by email
+// @ID get-offers-by-user
+// @Produce json
+// @Param email path string true "Email address of the offers to be retrieved"
+// @Param page path string true "Page number"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/search/user/{email}/{page} [get]
 func GetOffersByUser(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

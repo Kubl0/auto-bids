@@ -12,13 +12,13 @@ type PostOffer struct {
 }
 
 type Car struct {
-	Title              string   `json:"title" bson:"title" validate:"required,max=40"`
-	Make               string   `json:"make" bson:"make" validate:"required,max=30"`
-	Model              string   `json:"model" bson:"model" validate:"required,max=30"`
-	Price              int      `json:"price" bson:"price" validate:"required"`
-	Description        string   `json:"description" bson:"description" validate:"required,max=3000"`
-	Photos             []string `json:"photos" bson:"photos" validate:"required"`
-	Year               int      `json:"year" bson:"year" validate:"required"`
+	Title              string   `json:"title" bson:"title" validate:"required,max=40" example:"Audi A4 2.0 TDI"`
+	Make               string   `json:"make" bson:"make" validate:"required,max=30" example:"Audi"`
+	Model              string   `json:"model" bson:"model" validate:"required,max=30" example:"A4"`
+	Price              int      `json:"price" bson:"price" validate:"required" example:"10000"`
+	Description        string   `json:"description" bson:"description" validate:"required,max=3000" example:"Audi A4 2.0 TDI 2015, 190000 km, 10000 EUR"`
+	Photos             []string `json:"photos" bson:"photos" validate:"required" example:"https://example.com/image.jpg"`
+	Year               int      `json:"year" bson:"year" validate:"required" example:"2015"`
 	Mileage            int      `json:"mileage" bson:"mileage"`
 	VinNumber          string   `json:"vin_number" bson:"vin_number"`
 	EngineCapacity     int      `json:"engine_capacity" bson:"engine_capacity"`
@@ -38,6 +38,6 @@ type Car struct {
 }
 
 type Location struct {
-	Type        string    `json:"type" bson:"type" form:"type"`
-	Coordinates []float32 `json:"coordinates" bson:"coordinates" form:"coordinates"`
+  Type        string    `json:"type" bson:"type" form: "type" example:"Point"`
+	Coordinates []float32 `json:"coordinates" bson:"coordinates" form:"coordinates" example:"53.3,18.5"`
 }

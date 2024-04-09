@@ -12,6 +12,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// PostOffer godoc
+// @Summary Post an offer
+// @Description Post a user offer
+// @ID post-offer
+// @Produce json
+// @Param email path string true "Email address of the offer to be posted"
+// @Param userData body models.Car true "User data to be posted"
+// @Success 201 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /cars/add/{email} [post]
 func PostOffer(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 
