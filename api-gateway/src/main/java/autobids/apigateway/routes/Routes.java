@@ -18,20 +18,35 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.a
 
 @Component
 public class Routes {
+
     @Bean
-    public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator chatRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("/profiles/user/**", r -> r
-                        .path(UriConstants.PROFILES_USER_ROUTES)
-                        .uri(System.getenv("PROFILES_URI")))
+                .route(p -> p
+                        .path("/ws/chat/**")
+                        .uri("ws://" + System.getenv("CHAT_URI"))
+                )
+                .route(p -> p
+                        .path("/chat/**")
+                        .uri("http://" + System.getenv("CHAT_URI"))
+                )
                 .build();
     }
-
+  
     @Bean
     public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/admin/profiles/**", r -> r
                         .path(UriConstants.ADMIN_ROUTES_PROFILES)
+                        .uri(System.getenv("PROFILES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/profiles/user/**", r -> r
+                        .path(UriConstants.PROFILES_USER_ROUTES)
                         .uri(System.getenv("PROFILES_URI")))
                 .build();
     }
@@ -50,7 +65,7 @@ public class Routes {
     public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/login/me", r -> r
-                        .method("GET")
+                        .method("POST")
                         .and()
                         .path(UriConstants.PROFILES_LOGIN)
                         .filters(f -> f

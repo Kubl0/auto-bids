@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .pathMatchers(UriConstants.CARS_DELETE_ALL).hasAuthority("USER")
                         .pathMatchers(UriConstants.CARS_EDIT).hasAuthority("USER")
                         .pathMatchers(UriConstants.CARS_SEARCH_ME).hasAuthority("USER")
+                        .pathMatchers(UriConstants.CHAT_ROUTES).hasAuthority("USER")
                         .pathMatchers(UriConstants.MOTORCYCLES_ADD).hasAuthority("USER")
                         .pathMatchers(UriConstants.MOTORCYCLES_DELETE).hasAuthority("USER")
                         .pathMatchers(UriConstants.MOTORCYCLES_DELETE_ALL).hasAuthority("USER")
