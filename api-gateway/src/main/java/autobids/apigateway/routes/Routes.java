@@ -32,6 +32,15 @@ public class Routes {
                 )
                 .build();
     }
+  
+    @Bean
+    public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/profiles/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES_PROFILES)
+                        .uri(System.getenv("PROFILES_URI")))
+                .build();
+    }
 
     @Bean
     public RouteLocator profileRoutes(RouteLocatorBuilder builder) {
@@ -39,6 +48,15 @@ public class Routes {
                 .route("/profiles/user/**", r -> r
                         .path(UriConstants.PROFILES_USER_ROUTES)
                         .uri(System.getenv("PROFILES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator adminCarsRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/cars/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES_CARS)
+                        .uri(System.getenv("CARS_URI")))
                 .build();
     }
 
@@ -347,4 +365,185 @@ public class Routes {
                         .uri(System.getenv("CARS_URI")))
                 .build();
     }
+
+
+    @Bean
+    public RouteLocator getMotorcyclesRoutesByPage(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/search/{page}", r -> r
+                        .path(UriConstants.MOTORCYCLES_SEARCH)
+                        .uri(System.getenv("MOTORCYCLES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator getOneMotorcycleRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/details/{id}", r -> r
+                        .path(UriConstants.MOTORCYCLES_DETAILS)
+                        .uri(System.getenv("MOTORCYCLES_URI")))
+                .build();
+    }
+
+    @Bean
+    public RouteLocator postMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/add/me", r -> r
+                        .method("POST")
+                        .and()
+                        .path(UriConstants.MOTORCYCLES_ADD)
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String newPath = path.replaceAll(
+                                                            "/motorcycles/add/me",
+                                                            "/motorcycles/add/" + user.getAttribute("email"));
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
+                                )
+                        )
+                        .uri(System.getenv("MOTORCYCLES_URI"))
+                ).build();
+    }
+
+    @Bean
+    public RouteLocator deleteMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/delete/me", r -> r
+                        .method("DELETE")
+                        .and()
+                        .path(UriConstants.MOTORCYCLES_DELETE)
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String newPath = path.replaceAll(
+                                                            "/motorcycles/delete/me",
+                                                            "/motorcycles/delete/" + user.getAttribute("email"));
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
+                                )
+                        )
+                        .uri(System.getenv("MOTORCYCLES_URI"))
+                ).build();
+    }
+
+    @Bean
+    public RouteLocator deleteAllMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/delete/all/me", r -> r
+                        .method("DELETE")
+                        .and()
+                        .path(UriConstants.MOTORCYCLES_DELETE_ALL)
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String newPath = path.replaceAll(
+                                                            "/motorcycles/delete/all/me",
+                                                            "/motorcycles/delete/all/" + user.getAttribute("email"));
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
+                                )
+                        )
+                        .uri(System.getenv("MOTORCYCLES_URI"))
+                ).build();
+    }
+
+    @Bean
+    public RouteLocator putMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/edit/me", r -> r
+                        .method("PUT")
+                        .and()
+                        .path(UriConstants.MOTORCYCLES_EDIT)
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String newPath = path.replaceAll(
+                                                            "/motorcycles/edit/me",
+                                                            "/motorcycles/edit/" + user.getAttribute("email"));
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newPath);
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
+                                )
+                        )
+                        .uri(System.getenv("MOTORCYCLES_URI"))
+                ).build();
+    }
+
+    @Bean
+    public RouteLocator getCurrentUserMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/search/user/me/{page}", r -> r
+                        .method("GET")
+                        .and()
+                        .path(UriConstants.MOTORCYCLES_SEARCH_ME_ROUTES)
+                        .filters(f -> f
+                                .filter((exchange, chain) ->
+                                        ReactiveSecurityContextHolder.getContext()
+                                                .map(SecurityContext::getAuthentication)
+                                                .map(authentication -> {
+                                                    OAuth2User user = (OAuth2User) authentication.getPrincipal();
+                                                    ServerHttpRequest req = exchange.getRequest();
+                                                    addOriginalRequestUrl(exchange, req.getURI());
+                                                    String path = req.getURI().getRawPath();
+                                                    String[] pathSegments = path.split("/");
+                                                    String page = pathSegments[pathSegments.length - 1];
+                                                    String newPath = path.replaceAll(
+                                                            "/motorcycles/search/user/me/[^/]+",
+                                                            "/motorcycles/search/user/" + user.getAttribute("email")) + "/" + page;
+                                                    ServerHttpRequest request = req.mutate().path(newPath).build();
+                                                    exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, request.getURI());
+                                                    return exchange.mutate().request(request).build();
+                                                })
+                                                .flatMap(chain::filter)
+                                )
+                        )
+                        .uri(System.getenv("MOTORCYCLES_URI"))
+                ).build();
+    }
+
+    @Bean
+    public RouteLocator getUserMotorcyclesRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/motorcycles/search/user/**", r -> r
+                        .path(UriConstants.MOTORCYCLES_SEARCH_USER)
+                        .uri(System.getenv("MOTORCYCLES_URI")))
+                .build();
+    }
+
 }
