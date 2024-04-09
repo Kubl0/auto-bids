@@ -38,6 +38,6 @@ type Car struct {
 }
 
 type Location struct {
-	Type        string    `json:"type" bson:"type" example:"Point"`
-	Coordinates []float32 `json:"coordinates" bson:"coordinates" example:"53.3,18.5"`
+  Type        string    `json:"type" bson:"type" form: "type" example:"Point"`
+	Coordinates []float32 `json:"coordinates" bson:"coordinates" form:"coordinates" example:"53.3,18.5"`
 }

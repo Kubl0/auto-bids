@@ -69,7 +69,7 @@ func GetOffers(c *gin.Context) {
 		}
 
 		limit := int64(10)
-		var userCollection = service.GetCollection(service.DB, "cars")
+		var userCollection = service.GetCollection(service.DB)
 
 		filter := queries.GetOfferQuery(resultModel)
 		opts := getOptions(page, limit, resultModel)

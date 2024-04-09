@@ -88,14 +88,13 @@ func GetOfferQuery(offer models.CheckOffer) bson.M {
 		query["car.condition"] = offer.Condition
 	}
 
-	if len(offer.Location.Coordinates) == 2 && offer.Distance != 0 {
+	if offer.CoordinatesX != 0 && offer.CoordinatesY != 0 && offer.Distance != 0 {
 		query["car.location"] = bson.M{
-			"$nearSphere": bson.M{
-				"$geometry": bson.M{
-					"type":        "Point",
-					"coordinates": offer.Location.Coordinates,
+			"$geoWithin": bson.M{
+				"$centerSphere": []interface{}{
+					[]interface{}{offer.CoordinatesX, offer.CoordinatesY},
+					offer.Distance / 6378100, // distance is in kilometers
 				},
-				"$maxDistance": offer.Distance * 1000,
 			},
 		}
 	}
