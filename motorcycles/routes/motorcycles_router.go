@@ -5,7 +5,7 @@ import (
 	"motorcycles/controllers"
 )
 
-func CarsRoute(router *gin.Engine) {
+func MotorcyclesRoute(router *gin.Engine) {
 	profiles := router.Group("/motorcycles")
 	{
 		profiles.GET("/details/:id", controllers.GetOneOffer)

@@ -10,7 +10,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	routes.CarsRoute(router)
+	routes.MotorcyclesRoute(router)
 	service.ConnectDB()
 
 	errRouter := router.Run(os.Getenv("MOTORCYCLES_URI"))
