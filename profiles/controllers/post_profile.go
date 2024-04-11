@@ -13,6 +13,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// PostProfile godoc
+// @Summary Post a profile
+// @Description Post a user profile
+// @ID post-profile
+// @Produce json
+// @Param userData body models.PostProfile true "User data to be posted"
+// @Success 201 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /profiles/user [post]
 func PostProfile(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

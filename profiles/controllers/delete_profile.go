@@ -12,6 +12,17 @@ import (
 	"time"
 )
 
+// DeleteProfile godoc
+// @Summary Delete a profile
+// @Description Delete a user profile by email
+// @ID delete-profile
+// @Produce json
+// @Param email path string true "Email address of the profile to be deleted"
+// @Success 200
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /profiles/delete/{email} [delete]
 func DeleteProfile(c *gin.Context) {
 	result := make(chan responses.UserResponse)
 

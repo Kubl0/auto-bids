@@ -1,0 +1,165 @@
+basePath: /
+definitions:
+  models.EditProfile:
+    properties:
+      profile_image:
+        type: string
+      user_name:
+        maxLength: 30
+        type: string
+    required:
+    - profile_image
+    - user_name
+    type: object
+  models.PostProfile:
+    properties:
+      email:
+        type: string
+      profile_image:
+        type: string
+      user_name:
+        maxLength: 30
+        type: string
+    required:
+    - email
+    - profile_image
+    - user_name
+    type: object
+  responses.UserResponse:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:4100
+info:
+  contact: {}
+  description: This is a simple CRUD API for profiles
+  title: Profiles API
+  version: "1.0"
+paths:
+  /profiles/delete/{email}:
+    delete:
+      description: Delete a user profile by email
+      operationId: delete-profile
+      parameters:
+      - description: Email address of the profile to be deleted
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Delete a profile
+  /profiles/user:
+    post:
+      description: Post a user profile
+      operationId: post-profile
+      parameters:
+      - description: User data to be posted
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.PostProfile'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Post a profile
+  /profiles/user/{email}:
+    get:
+      description: Get a user profile by email
+      operationId: get-profile
+      parameters:
+      - description: Email address of the profile to be retrieved
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Get a profile
+    put:
+      description: Edit a user profile by email
+      operationId: edit-profile
+      parameters:
+      - description: Email address of the profile to be edited
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: User data to be edited
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.EditProfile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Edit a profile
+swagger: "2.0"
