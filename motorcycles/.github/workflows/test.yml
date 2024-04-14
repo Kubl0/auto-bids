@@ -22,5 +22,5 @@ jobs:
         env:
           COLLECTION_NAME: motorcycles_test
           DB_NAME: motorcycles
-          DB_CARS_HOST: ${{ secrets.DB_MOTORCYCLES_HOST }}
+          DB_MOTORCYCLES_HOST: ${{ secrets.DB_MOTORCYCLES_HOST }}
         run: go test ./...
