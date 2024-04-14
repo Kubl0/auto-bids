@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
@@ -44,6 +45,8 @@ func DeleteProfile(c *gin.Context) {
 		}
 
 		var userCollection = service.GetCollection(service.DB)
+
+		fmt.Println("test")
 
 		filter := bson.D{{"email", email.Email}}
 		results, err := userCollection.DeleteOne(ctx, filter)
