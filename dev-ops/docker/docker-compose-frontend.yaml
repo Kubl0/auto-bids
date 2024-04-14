@@ -6,8 +6,19 @@ networks:
   cars-net:
   chat-net:
   motorcycles-net:
+  frontend-net:
 
 services:
+  frontend:
+    env_file:
+      - .env-frontend
+    image: autobidscloud/auto-bids:frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend-net
+      - api-gateway-net
+
   api-gateway:
     env_file:
       - .env-api-gateway
@@ -20,6 +31,7 @@ services:
       - cars-net
       - chat-net
       - motorcycles-net
+      - frontend-net
 
   profiles:
     env_file:

@@ -1,3 +1,4 @@
 .env*
 envy
+.idea
 *config.yaml
