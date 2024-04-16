@@ -60,6 +60,15 @@ public class Routes {
                 .build();
     }
 
+    @Bean
+    public RouteLocator adminMotorcyclesRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("/admin/motorcycles/**", r -> r
+                        .path(UriConstants.ADMIN_ROUTES_MOTORCYCLES)
+                        .uri(System.getenv("MOTORCYCLES_URI")))
+                .build();
+    }
+
 
     @Bean
     public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
