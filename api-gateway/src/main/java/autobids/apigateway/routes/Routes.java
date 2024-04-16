@@ -74,7 +74,7 @@ public class Routes {
     public RouteLocator createRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("/profiles/login/me", r -> r
-                        .method("POST")
+                        .method("GET")
                         .and()
                         .path(UriConstants.PROFILES_LOGIN)
                         .filters(f -> f
