@@ -27,4 +27,8 @@ public final class UriConstants {
     public static final String MOTORCYCLES_EDIT = "/motorcycles/edit/me";
     public static final String MOTORCYCLES_SEARCH_ME_ROUTES = "/motorcycles/search/user/me/{page}";
     public static final String MOTORCYCLES_SEARCH_USER = "/motorcycles/search/user/{email}/{page}";
+    public static final String AUCTIONS_WS = "/auctions/ws/**";
+    public static final String AUCTIONS_ADD = "/auctions/add/**";
+    public static final String AUCTIONS_DELETE = "/auctions/remove/**";
+    public static final String AUCTIONS_EDIT = "/auctions/edit/**";
 }
