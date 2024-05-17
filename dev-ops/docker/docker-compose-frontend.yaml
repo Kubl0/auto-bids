@@ -7,6 +7,7 @@ networks:
   chat-net:
   motorcycles-net:
   frontend-net:
+  bids-net:
 
 services:
   frontend:
@@ -72,3 +73,14 @@ services:
     networks:
       - api-gateway-net
       - chat-net
+
+  bids:
+    env_file:
+      - .env-bids
+    image: autobidscloud/auto-bids:bids
+    ports:
+      - "4600:4600"
+    networks:
+      - api-gateway-net
+      - bids-net
+

@@ -6,6 +6,7 @@ networks:
   cars-net:
   chat-net:
   motorcycles-net:
+  bids-net:
 
 services:
   api-gateway:
@@ -60,3 +61,14 @@ services:
     networks:
       - api-gateway-net
       - chat-net
+
+  bids:
+    env_file:
+      - .env-bids
+    image: autobidscloud/auto-bids:bids
+    ports:
+      - "4600:4600"
+    networks:
+      - api-gateway-net
+      - bids-net
+
