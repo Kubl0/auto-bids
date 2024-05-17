@@ -32,6 +32,20 @@ public class Routes {
                 )
                 .build();
     }
+
+    @Bean
+    public RouteLocator auctionRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(p -> p
+                        .path("/auction/ws/**")
+                        .uri("ws://" + System.getenv("AUCTION_URI"))
+                )
+                .route(p -> p
+                        .path("/auction/**")
+                        .uri("http://" + System.getenv("AUCTION_URI"))
+                )
+                .build();
+    }
   
     @Bean
     public RouteLocator adminProfilesRoutes(RouteLocatorBuilder builder) {
