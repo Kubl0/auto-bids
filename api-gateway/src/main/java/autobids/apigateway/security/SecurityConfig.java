@@ -32,7 +32,7 @@ public class SecurityConfig {
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(UriConstants.PROFILES_LOGIN).hasAuthority("USER")
+                        .pathMatchers(UriConstants.PROFILES_LOGIN).authenticated()
                         .pathMatchers(UriConstants.PROFILES_DELETE).hasAuthority("USER")
                         .pathMatchers(UriConstants.PROFILES_EDIT).hasAuthority("USER")
                         .pathMatchers(UriConstants.CARS_ADD).hasAuthority("USER")
