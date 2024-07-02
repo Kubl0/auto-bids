@@ -1,50 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: profiles-deployment
+  name: bids-deployment
   labels:
-    app: profiles
+    app: bids
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: profiles
+      app: bids
   template:
     metadata:
       labels:
-        app: profiles
+        app: bids
     spec:
       containers:
-        - name: profiles
-          image: autobidscloud/auto-bids:profiles
+        - name: bids
+          image: autobidscloud/auto-bids:bids
           imagePullPolicy: "Always"
           ports:
-            - containerPort: 4100
+            - containerPort: 4600
           env:
-            - name: DB_PROFILES_HOST
+            - name: DB
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: DB_PROFILES_HOST
+                  name: bids-config
+                  key: DB
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: bids-config
                   key: DB_NAME
-            - name: COLLECTION_NAME
+            - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: COLLECTION_NAME
-            - name: PROFILES_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: profiles-config
-                  key: PROFILES_URI
+                  name: bids-config
+                  key: PORT
             - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: bids-config
                   key: GIN_MODE
           resources:
             requests:
@@ -53,3 +48,4 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "250m"
+

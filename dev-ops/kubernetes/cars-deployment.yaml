@@ -1,50 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: profiles-deployment
+  name: cars-deployment
   labels:
-    app: profiles
+    app: cars
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: profiles
+      app: cars
   template:
     metadata:
       labels:
-        app: profiles
+        app: cars
     spec:
       containers:
-        - name: profiles
-          image: autobidscloud/auto-bids:profiles
+        - name: cars
+          image: autobidscloud/auto-bids:cars
           imagePullPolicy: "Always"
           ports:
-            - containerPort: 4100
+            - containerPort: 4200
           env:
-            - name: DB_PROFILES_HOST
+            - name: DB_CARS_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: DB_PROFILES_HOST
+                  name: cars-config
+                  key: DB_CARS_HOST
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: cars-config
                   key: DB_NAME
             - name: COLLECTION_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: cars-config
                   key: COLLECTION_NAME
-            - name: PROFILES_URI
+            - name: CARS_URI
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: PROFILES_URI
+                  name: cars-config
+                  key: CARS_URI
             - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: cars-config
                   key: GIN_MODE
           resources:
             requests:

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bids-service
+  labels:
+    app: bids-gateway
+spec:
+  type: ClusterIP
+  selector:
+    app: bids-gateway
+  ports:
+    - name: http
+      port: 4600
+      targetPort: 4600

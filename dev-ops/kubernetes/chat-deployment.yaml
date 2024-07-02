@@ -1,50 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: profiles-deployment
+  name: chat-deployment
   labels:
-    app: profiles
+    app: chat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: profiles
+      app: chat
   template:
     metadata:
       labels:
-        app: profiles
+        app: chat
     spec:
       containers:
-        - name: profiles
-          image: autobidscloud/auto-bids:profiles
+        - name: chat
+          image: autobidscloud/auto-bids:chat
           imagePullPolicy: "Always"
           ports:
-            - containerPort: 4100
+            - containerPort: 4500
           env:
-            - name: DB_PROFILES_HOST
+            - name: DB
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: DB_PROFILES_HOST
+                  name: chat-config
+                  key: DB
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: chat-config
                   key: DB_NAME
-            - name: COLLECTION_NAME
+            - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: COLLECTION_NAME
-            - name: PROFILES_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: profiles-config
-                  key: PROFILES_URI
+                  name: chat-config
+                  key: PORT
             - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: chat-config
                   key: GIN_MODE
           resources:
             requests:

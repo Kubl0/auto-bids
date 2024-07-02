@@ -1,50 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: profiles-deployment
+  name: motorcycles-deployment
   labels:
-    app: profiles
+    app: motorcycles
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: profiles
+      app: motorcycles
   template:
     metadata:
       labels:
-        app: profiles
+        app: motorcycles
     spec:
       containers:
-        - name: profiles
-          image: autobidscloud/auto-bids:profiles
-          imagePullPolicy: "Always"
+        - name: motorcycles
+          image: autobidscloud/auto-bids:motorcycles
+          imagePullPolicy: Always
           ports:
-            - containerPort: 4100
+            - containerPort: 4300
           env:
-            - name: DB_PROFILES_HOST
+            - name: DB_MOTORCYCLES_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: DB_PROFILES_HOST
+                  name: motorcycles-config
+                  key: DB_MOTORCYCLES_HOST
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: motorcycles-config
                   key: DB_NAME
             - name: COLLECTION_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: motorcycles-config
                   key: COLLECTION_NAME
-            - name: PROFILES_URI
+            - name: MOTORCYCLES_URI
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
-                  key: PROFILES_URI
+                  name: motorcycles-config
+                  key: MOTORCYCLES_URI
             - name: GIN_MODE
               valueFrom:
                 configMapKeyRef:
-                  name: profiles-config
+                  name: motorcycles-config
                   key: GIN_MODE
           resources:
             requests:
