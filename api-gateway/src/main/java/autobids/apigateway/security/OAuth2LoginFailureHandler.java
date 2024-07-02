@@ -15,9 +15,8 @@ public class OAuth2LoginFailureHandler implements ServerAuthenticationFailureHan
 
     @Override
     public Mono<Void> onAuthenticationFailure(WebFilterExchange webFilterExchange, AuthenticationException exception) {
-//        String frontendUri = System.getenv("FRONTEND_URI");
-//        String redirectUrl = frontendUri + "/register";
-        String redirectUrl = "http://localhost:3000/#/register";
+        String frontendUri = System.getenv("FRONTEND_URI");
+        String redirectUrl = frontendUri + "/#/register";
 
         return Mono.fromRunnable(() -> {
             ServerWebExchange serverWebExchange = webFilterExchange.getExchange();
