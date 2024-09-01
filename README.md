@@ -1,0 +1,1 @@
+This is a monorepo consisting of every module of my BA Paper project auto-bids. The original organization where the team worked on this project is in this organization: [auto-bids](https://github.com/auto-bids).
