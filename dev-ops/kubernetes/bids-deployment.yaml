@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bids-deployment
+  labels:
+    app: bids
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bids
+  template:
+    metadata:
+      labels:
+        app: bids
+    spec:
+      containers:
+        - name: bids
+          image: autobidscloud/auto-bids:bids
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4600
+          env:
+            - name: DB
+              valueFrom:
+                configMapKeyRef:
+                  name: bids-config
+                  key: DB
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: bids-config
+                  key: DB_NAME
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: bids-config
+                  key: PORT
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: bids-config
+                  key: GIN_MODE
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: autobidscloud/auto-bids:api-gateway
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4000
+          env:
+            - name: CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CLIENT_ID
+            - name: CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CLIENT_SECRET
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: SERVER_PORT
+            - name: PROFILES_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: PROFILES_URI
+            - name: FRONTEND_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: FRONTEND_URI
+            - name: OAUTH_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: OAUTH_URI
+            - name: CARS_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CARS_URI
+            - name: MOTORCYCLES_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: MOTORCYCLES_URI
+            - name: CHAT_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: CHAT_URI
+            - name: AUCTION_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-config
+                  key: AUCTION_URI
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"

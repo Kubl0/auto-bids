@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: motorcycles-service
+  labels:
+    app: motorcycles
+spec:
+  type: ClusterIP
+  selector:
+    app: motorcycles
+  ports:
+    - name: http
+      port: 4300
+      targetPort: 4300

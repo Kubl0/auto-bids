@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: autobidscloud/auto-bids:frontend-test
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_API_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_API_BASE_URL
+            - name: REACT_APP_PROFILE_LOGIN_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_PROFILE_LOGIN_ENDPOINT
+            - name: REACT_APP_CARS_OFFER_ID_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CARS_OFFER_ID_ENDPOINT
+            - name: REACT_APP_CLOUDINARY_UPLOAD_PRESET
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CLOUDINARY_UPLOAD_PRESET
+            - name: REACT_APP_CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CLOUDINARY_CLOUD_NAME
+            - name: REACT_APP_CLOUDINARY_API_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CLOUDINARY_API_SECRET
+            - name: REACT_APP_CLOUDINARY_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CLOUDINARY_API_KEY
+            - name: REACT_APP_OPENCAGEDATA_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_OPENCAGEDATA_API_KEY
+            - name: REACT_APP_EMAILJS_PUBLIC_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_EMAILJS_PUBLIC_KEY
+            - name: REACT_APP_EMAILJS_SERVICE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_EMAILJS_SERVICE_ID
+            - name: REACT_APP_EMAILJS_TEMPLATE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_EMAILJS_TEMPLATE_ID
+            - name: REACT_APP_EMAILJS_TEMPLATE_ID_2
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_EMAILJS_TEMPLATE_ID_2
+            - name: REACT_APP_CHAT_HISTORY_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CHAT_HISTORY_ENDPOINT
+            - name: REACT_APP_CHAT_CONVERSATIONS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CHAT_CONVERSATIONS_ENDPOINT
+            - name: REACT_APP_CHAT_CREATE_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_CHAT_CREATE_ENDPOINT
+            - name: AUTH0_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: AUTH0_USERNAME
+            - name: AUTH0_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: AUTH0_PASSWORD
+            - name: REACT_APP_AUCTIONS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_AUCTIONS_ENDPOINT
+            - name: REACT_APP_AUCTIONS_WS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_AUCTIONS_WS_ENDPOINT
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"

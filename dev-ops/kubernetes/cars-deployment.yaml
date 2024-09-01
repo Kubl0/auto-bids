@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cars-deployment
+  labels:
+    app: cars
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cars
+  template:
+    metadata:
+      labels:
+        app: cars
+    spec:
+      containers:
+        - name: cars
+          image: autobidscloud/auto-bids:cars
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4200
+          env:
+            - name: DB_CARS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: cars-config
+                  key: DB_CARS_HOST
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: cars-config
+                  key: DB_NAME
+            - name: COLLECTION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: cars-config
+                  key: COLLECTION_NAME
+            - name: CARS_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: cars-config
+                  key: CARS_URI
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: cars-config
+                  key: GIN_MODE
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: motorcycles-deployment
+  labels:
+    app: motorcycles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: motorcycles
+  template:
+    metadata:
+      labels:
+        app: motorcycles
+    spec:
+      containers:
+        - name: motorcycles
+          image: autobidscloud/auto-bids:motorcycles
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4300
+          env:
+            - name: DB_MOTORCYCLES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: motorcycles-config
+                  key: DB_MOTORCYCLES_HOST
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: motorcycles-config
+                  key: DB_NAME
+            - name: COLLECTION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: motorcycles-config
+                  key: COLLECTION_NAME
+            - name: MOTORCYCLES_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: motorcycles-config
+                  key: MOTORCYCLES_URI
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: motorcycles-config
+                  key: GIN_MODE
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"

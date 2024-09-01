@@ -1,0 +1,74 @@
+version: '3'
+
+networks:
+  api-gateway-net:
+  profiles-net:
+  cars-net:
+  chat-net:
+  motorcycles-net:
+  bids-net:
+
+services:
+  api-gateway:
+    env_file:
+      - .env-api-gateway
+    image: autobidscloud/auto-bids:api-gateway
+    ports:
+      - "4000:4000"
+    networks:
+      - api-gateway-net
+      - profiles-net
+      - cars-net
+      - chat-net
+      - motorcycles-net
+
+  profiles:
+    env_file:
+      - .env-profiles
+    image: autobidscloud/auto-bids:profiles
+    ports:
+      - "4100:4100"
+    networks:
+      - api-gateway-net
+      - profiles-net
+
+  cars:
+    env_file:
+      - .env-cars
+    image: autobidscloud/auto-bids:cars
+    ports:
+      - "4200:4200"
+    networks:
+      - api-gateway-net
+      - cars-net
+
+  motorcycles:
+    env_file:
+      - .env-motorcycles
+    image: autobidscloud/auto-bids:motorcycles
+    ports:
+      - "4300:4300"
+    networks:
+      - api-gateway-net
+      - motorcycles-net
+
+  chat:
+    env_file:
+      - .env-chat
+    image: autobidscloud/auto-bids:chat
+    ports:
+      - "4500:4500"
+    networks:
+      - api-gateway-net
+      - chat-net
+
+  bids:
+    env_file:
+      - .env-bids
+    image: autobidscloud/auto-bids:bids
+    ports:
+      - "4600:4600"
+    networks:
+      - api-gateway-net
+      - bids-net
+
