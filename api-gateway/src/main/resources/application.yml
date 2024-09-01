@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    session:
+      timeout: 60m
+
+logging:
+  level:
+    org.springframework: WARN
+
+
+
+okta:
+  oauth2:
+    issuer: ${OAUTH_URI}
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    groups-claim: ${FRONTEND_URI}/roles
