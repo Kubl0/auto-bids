@@ -1,0 +1,451 @@
+basePath: /
+definitions:
+  models.Car:
+    properties:
+      condition:
+        type: string
+      description:
+        example: Audi A4 2.0 TDI 2015, 190000 km, 10000 EUR
+        maxLength: 3000
+        type: string
+      doors:
+        type: integer
+      drive:
+        type: string
+      engine_capacity:
+        type: integer
+      first_registration:
+        type: string
+      fuel:
+        type: string
+      location:
+        $ref: '#/definitions/models.Location'
+      make:
+        example: Audi
+        maxLength: 30
+        type: string
+      mileage:
+        type: integer
+      model:
+        example: A4
+        maxLength: 30
+        type: string
+      photos:
+        example:
+        - https://example.com/image.jpg
+        items:
+          type: string
+        type: array
+      power:
+        type: integer
+      price:
+        example: 10000
+        type: integer
+      registration_number:
+        type: string
+      seats:
+        type: integer
+      steering:
+        type: string
+      telephone_number:
+        type: string
+      title:
+        example: Audi A4 2.0 TDI
+        maxLength: 40
+        type: string
+      transmission:
+        type: string
+      type:
+        type: string
+      vin_number:
+        type: string
+      year:
+        example: 2015
+        type: integer
+    required:
+    - description
+    - make
+    - model
+    - photos
+    - price
+    - title
+    - year
+    type: object
+  models.EditOffer:
+    properties:
+      description:
+        maxLength: 3000
+        type: string
+      id:
+        type: string
+      mileage:
+        type: integer
+      photos:
+        items:
+          type: string
+        type: array
+      price:
+        type: integer
+    required:
+    - id
+    type: object
+  models.Id:
+    properties:
+      id:
+        type: string
+    type: object
+  models.Location:
+    properties:
+      coordinates:
+        example:
+        - 0
+        items:
+          type: number
+        type: array
+      type:
+        example: Point
+        type: string
+    type: object
+  responses.UserResponse:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:4200
+info:
+  contact: {}
+  description: This is a simple CRUD API for profiles
+  title: Profiles API
+  version: "1.0"
+paths:
+  /admin/cars/delete/{id}:
+    delete:
+      description: Delete all offers by user email
+      operationId: delete-offer-by-id
+      parameters:
+      - description: ID of the offer to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Delete all offers
+  /cars/add/{email}:
+    post:
+      description: Post a user offer
+      operationId: post-offer
+      parameters:
+      - description: Email address of the offer to be posted
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: User data to be posted
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Post an offer
+  /cars/delete/{email}:
+    delete:
+      description: Delete all offers by user email
+      operationId: delete-offer
+      parameters:
+      - description: Email address of the user to delete offer
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: ID of the offer to delete
+        in: body
+        name: id
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Delete offer
+  /cars/delete/all/{email}:
+    delete:
+      description: Delete all offers by user email
+      operationId: delete-all-offers
+      parameters:
+      - description: Email address of the user to delete all offers
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Delete all offers
+  /cars/details/{id}:
+    get:
+      description: Get a user offer by id
+      operationId: get-offer
+      parameters:
+      - description: Id of the offer to be retrieved
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Get an offer
+  /cars/edit/{email}:
+    put:
+      description: Edit a user offer by email
+      operationId: edit-offer
+      parameters:
+      - description: Email address of the offer to be edited
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: User data to be edited
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.EditOffer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Edit an offer
+  /cars/search/{page}:
+    get:
+      description: Get offers by filter
+      operationId: get-offers
+      parameters:
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: string
+      - in: query
+        name: condition
+        type: string
+      - in: query
+        maximum: 1000
+        name: distance
+        type: integer
+      - in: query
+        name: doors
+        type: integer
+      - in: query
+        name: drive
+        type: string
+      - in: query
+        name: engine_capacity_max
+        type: integer
+      - in: query
+        name: engine_capacity_min
+        type: integer
+      - in: query
+        name: filter_by
+        type: string
+      - in: query
+        name: fuel
+        type: string
+      - in: query
+        maxLength: 30
+        name: make
+        type: string
+      - in: query
+        name: mileage_max
+        type: integer
+      - in: query
+        name: mileage_min
+        type: integer
+      - in: query
+        maxLength: 30
+        name: model
+        type: string
+      - in: query
+        name: power_max
+        type: integer
+      - in: query
+        name: power_min
+        type: integer
+      - in: query
+        name: price_max
+        type: integer
+      - in: query
+        name: price_min
+        type: integer
+      - in: query
+        name: seats
+        type: integer
+      - in: query
+        name: sort_direction
+        type: integer
+      - in: query
+        name: steering
+        type: string
+      - in: query
+        name: transmission
+        type: string
+      - in: query
+        name: type
+        type: string
+      - in: query
+        name: year_max
+        type: integer
+      - in: query
+        name: year_min
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Get offers
+  /cars/search/user/{email}/{page}:
+    get:
+      description: Get a user offers by email
+      operationId: get-offers-by-user
+      parameters:
+      - description: Email address of the offers to be retrieved
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Get offers by user
+swagger: "2.0"

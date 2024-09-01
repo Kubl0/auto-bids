@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Test
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21.4
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Test
+        env:
+          COLLECTION_NAME: cars_test
+          DB_NAME: cars
+          DB_CARS_HOST: ${{ secrets.DB_CARS_HOST }}
+        run: go test ./...
